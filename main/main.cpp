@@ -2,125 +2,147 @@
 #include <fstream>
 #include <string>
 
+// Include articulos
+#include "../articulos/articulos.h"
+#include "../helpers/helpers.h"
+#include "../vendedores/vendedores.h"
+
 using namespace std;
 
-struct Articulo
+// struct Articulo
+// {
+//     string id;
+//     string nombre;
+//     int cantidad;
+//     float precio;
+// };
+
+// struct Node
+// {
+//     // int id;
+//     Articulo articulo;
+//     Node *next;
+// };
+
+// Node *crear_nodo_articulo(Articulo articulo)
+// {
+
+//     Node *new_node = new Node;
+
+//     if (new_node)
+//     {
+//         new_node->articulo = articulo;
+//         new_node->next = NULL;
+//     }
+//     else
+//     {
+//         cerr << "Error creating new node." << endl;
+//     }
+
+//     return new_node;
+// }
+
+// // Crear articulo con data dada por el usuario
+// Articulo crear_articulo(void)
+// {
+
+//     Articulo nuevo_articulo; // Crear un objeto para el nuevo artículo
+
+//     // Crear id dinámicamente en base a la categoría del producto
+//     // Lógica para asignar ID automáticamente ...
+
+//     // FALTA VALIDAR DATOS
+//     cout << "ID del articulo: ";
+//     cin >> nuevo_articulo.id;
+
+//     cout << "Nombre del articulo: ";
+//     cin >> nuevo_articulo.nombre;
+//     // ! OJO
+//     cin.ignore(); // Ignore any previous newline character in the buffer
+//     getline(cin, nuevo_articulo.nombre);
+
+//     cout << "Precio del articulo: ";
+//     cin >> nuevo_articulo.precio;
+
+//     cout << "Cantidad del articulo: ";
+//     cin >> nuevo_articulo.cantidad;
+
+//     return nuevo_articulo;
+// }
+
+// // Add to list end
+// void agregar_articulo_lista(Node **headRef, Articulo articulo)
+// {
+//     Node *current = *headRef;
+//     Node *new_node = crear_nodo_articulo(articulo);
+
+//     // If list is empty
+//     if (current == NULL)
+//     {
+//         *headRef = new_node;
+//     }
+//     else
+//     {
+//         while (current->next != NULL)
+//         {
+//             current = current->next;
+//         }
+
+//         // Add new article as the last element
+//         current->next = new_node;
+//     }
+// }
+
+// // FALTA CARGAR LA LISTA CON EL ARCHIVO
+
+// void agregar_articulo_archivo(Articulo nuevo_articulo)
+// {
+//     ofstream file("articulos.txt", ios::app);
+
+//     if (file.is_open())
+//     {
+//         file << nuevo_articulo.id << endl;
+//         file << nuevo_articulo.nombre << endl;
+//         file << nuevo_articulo.precio << endl;
+//         file << nuevo_articulo.cantidad << endl;
+
+//         file.close();
+//         cout << "Articulo agregado exitosamente.\n";
+//     }
+//     else
+//     {
+//         cerr << "Error opening the file." << endl;
+//     }
+// }
+
+void print_list(Node<Articulo> *head)
 {
-    string id;
-    string nombre;
-    int cantidad;
-    float precio;
-};
 
-struct Node
-{
-    // int id;
-    Articulo articulo;
-    Node *next;
-};
-
-Node *crear_nodo_articulo(Articulo articulo)
-{
-
-    Node *new_node = new Node;
-
-    if (new_node)
-    {
-        new_node->articulo = articulo;
-        new_node->next = NULL;
-    }
-    else
-    {
-        cerr << "Error creating new node." << endl;
-    }
-
-    return new_node;
-}
-
-// Crear articulo con data dada por el usuario
-Articulo crear_articulo(void)
-{
-
-    Articulo nuevo_articulo; // Crear un objeto para el nuevo artículo
-
-    // Crear id dinámicamente en base a la categoría del producto
-    // Lógica para asignar ID automáticamente ...
-
-    // FALTA VALIDAR DATOS
-    cout << "ID del articulo: ";
-    cin >> nuevo_articulo.id;
-
-    cout << "Nombre del articulo: ";
-    cin >> nuevo_articulo.nombre;
-    // ! OJO
-    cin.ignore(); // Ignore any previous newline character in the buffer
-    getline(cin, nuevo_articulo.nombre);
-
-    cout << "Precio del articulo: ";
-    cin >> nuevo_articulo.precio;
-
-    cout << "Cantidad del articulo: ";
-    cin >> nuevo_articulo.cantidad;
-
-    return nuevo_articulo;
-}
-
-// Add to list end
-void agregar_articulo_lista(Node **headRef, Articulo articulo)
-{
-    Node *current = *headRef;
-    Node *new_node = crear_nodo_articulo(articulo);
-
-    // If list is empty
-    if (current == NULL)
-    {
-        *headRef = new_node;
-    }
-    else
-    {
-        while (current->next != NULL)
-        {
-            current = current->next;
-        }
-
-        // Add new article as the last element
-        current->next = new_node;
-    }
-}
-
-// FALTA CARGAR LA LISTA CON EL ARCHIVO
-
-void agregar_articulo_archivo(Articulo nuevo_articulo)
-{
-    ofstream file("articulos.txt", ios::app);
-
-    if (file.is_open())
-    {
-        file << nuevo_articulo.id << endl;
-        file << nuevo_articulo.nombre << endl;
-        file << nuevo_articulo.precio << endl;
-        file << nuevo_articulo.cantidad << endl;
-
-        file.close();
-        cout << "Articulo agregado exitosamente.\n";
-    }
-    else
-    {
-        cerr << "Error opening the file." << endl;
-    }
-}
-
-void print_list(Node *head)
-{
-
-    Node *current = head;
+    Node<Articulo> *current = head;
 
     while (current != NULL)
     {
-        cout << "ID: " << current->articulo.id << endl;
-        cout << "Nombre: " << current->articulo.nombre << endl;
-        cout << "Precio: " << current->articulo.precio << endl;
-        cout << "Cantidad: " << current->articulo.cantidad << endl;
+        cout << "ID: " << current->data.id << endl;
+        cout << "Nombre: " << current->data.nombre << endl;
+        cout << "Precio: " << current->data.precio << endl;
+        cout << "Cantidad: " << current->data.cantidad << endl;
+        cout << "----------------------" << endl;
+
+        current = current->next;
+    }
+}
+
+void print_list(Node<Articulo> *head)
+{
+
+    Node<Articulo> *current = head;
+
+    while (current != NULL)
+    {
+        cout << "ID: " << current->data.id << endl;
+        cout << "Nombre: " << current->data.nombre << endl;
+        cout << "Precio: " << current->data.precio << endl;
+        cout << "Cantidad: " << current->data.cantidad << endl;
         cout << "----------------------" << endl;
 
         current = current->next;
@@ -138,7 +160,7 @@ void printMenu()
 
 int main(int argc, char **argv)
 {
-    Node *head = NULL;
+    Node<Articulo> *head = NULL;
     int option = -1;
     Articulo articulo;
 
