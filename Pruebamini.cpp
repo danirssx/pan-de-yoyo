@@ -36,7 +36,7 @@ class Larticulo
 public:
     nodoa *cabeza = NULL;
     // builder
-    agregar(string id, string nombre, float precio, long int cantidad)
+    void agregar(string id, string nombre, float precio, long int cantidad)
     {
 
         if (this->cabeza == NULL)
@@ -55,9 +55,14 @@ public:
 
 int main(int argc, char const *argv[])
 {
-    articulo *harina = new articulo("ujuuuu", "harina", 4.2, 15);
-    /* code */
-    cout << harina->;
+    Larticulo *Productos = new Larticulo;
+    Productos->agregar("A0001", "Donas Sabrosssas", 4.2, 66);
+
+    cout << "Datos del primer nodo de lista productos:" << endl;
+    cout << "Id: " << Productos->cabeza->data.id << endl;
+    cout << "nombre: " << Productos->cabeza->data.nombre << endl;
+    cout << "Precio: " << Productos->cabeza->data.precio << endl;
+    cout << "Cantidad: " << Productos->cabeza->data.cantidad << endl;
 
     return 0;
 }
