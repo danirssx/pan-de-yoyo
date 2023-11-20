@@ -88,7 +88,9 @@ class NyA // Nombre y Apellido
         this->nombre = nombre;
         this->apellido = apellido;
     };
-} class vendedor // objeto que va en la posicion de DATA del nodo
+};
+
+class vendedor // objeto que va en la posicion de DATA del nodo
 {
 
 public:
