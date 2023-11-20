@@ -3,7 +3,7 @@
 #include <string>
 
 using namespace std;
-class articulo // objeto que va en la posicion de DATA del nodo
+class Articulo // objeto que va en la posicion de DATA del nodo
 {
 public:
     string id, nombre;
@@ -23,12 +23,12 @@ public:
 class nodoa
 {
 public:
-    articulo data;
+    Articulo articulo;
     nodoa *prox = NULL;
     // builder
     nodoa(string id, string nombre, float precio, long int cantidad)
     {
-        this->data.llenar(id, nombre, precio, cantidad);
+        this->articulo.llenar(id, nombre, precio, cantidad);
     }
 };
 
@@ -60,53 +60,95 @@ public:
         while (actual != NULL)
         {
 
-            cout << "Id: " << this->cabeza->data.id;
-            cout << " nombre: " << this->cabeza->data.nombre;
-            cout << " Precio: " << this->cabeza->data.precio;
-            cout << " Cantidad: " << this->cabeza->data.cantidad << endl;
+            cout << "Id: " << this->cabeza->articulo.id;
+            cout << " nombre: " << this->cabeza->articulo.nombre;
+            cout << " Precio: " << this->cabeza->articulo.precio;
+            cout << " Cantidad: " << this->cabeza->articulo.cantidad << endl;
             actual = actual->prox;
         }
     };
 };
 
-class Fecha
+struct Fecha
 {
     short int dia, mes, ano;
     // builder
-    void llenar(short int dia, short int mes, short int ano)
-    {
-        this->dia = dia;
-        this->mes = mes;
-        this->ano = ano;
-    }
 };
-class NyA // Nombre y Apellido
+struct NyA // Nombre y Apellido
 {
     string nombre, apellido;
-    void llenar(string nombre, string apellido)
-    {
-        this->nombre = nombre;
-        this->apellido = apellido;
-    };
 };
 
-class vendedor // objeto que va en la posicion de DATA del nodo
+class Vendedor // objeto que va en la posicion de DATA del nodo
 {
 
 public:
     long int cedula = 0;
-    string nombre = "";
-    Fecha Fecha_ingreso;
+    NyA *nombre = NULL;
+    Fecha *Fecha_ingreso;
     short int p_comision;
     int score = 0;
     // falta por agregar receta;
     // METODO
-    void llenar(long int cedula, string nombre, Fecha fecha, short int p_comision)
+    void llenar(long int cedula, NyA *nombre, Fecha *fecha, short int p_comision, int score)
     {
         this->cedula = cedula;
         this->nombre = nombre;
         this->Fecha_ingreso = fecha;
         this->p_comision = p_comision;
+        this->score = score;
+    };
+};
+
+class nodov
+{
+public:
+    Vendedor vendedor;
+    nodov *prox = NULL;
+    // builder
+
+    nodov(long int cedula, NyA *nombre, Fecha *fecha, short int p_comision, int score)
+    {
+        this->vendedor.llenar(cedula, nombre, fecha, p_comision, score);
+    };
+};
+
+class Lvendedor
+{
+
+public:
+    nodov *cabeza = NULL;
+    // metodo
+    void agregar(long int cedula, NyA *nombre, Fecha *fecha, short int p_comision, int score)
+    {
+
+        if (this->cabeza == NULL)
+            this->cabeza = new nodov(cedula, nombre, fecha, p_comision, score);
+        else
+        {
+            nodov *actual = this->cabeza;
+            while (actual->prox != NULL) // hasta ser el ultimo nodo de la lista
+            {
+                actual = actual->prox;
+            }
+            actual->prox = new nodov(cedula, nombre, fecha, p_comision, score);
+        }
+    };
+    void imprimir()
+    { // no se va a tomar caso lista vacia, se supone que se imprime con algo
+
+        nodov *actual = this->cabeza;
+        cout << "Articulos de la lista : " << endl;
+        while (actual != NULL)
+        {
+
+            cout << "Cedula: " << this->cabeza->vendedor.cedula;
+            cout << " nombre: " << this->cabeza->vendedor.nombre->nombre << this->cabeza->vendedor.nombre->apellido;
+            cout << " Fecha de ingreso:" << this->cabeza->vendedor.Fecha_ingreso->dia << '/';
+            cout << this->cabeza->vendedor.Fecha_ingreso->mes << '/' << this->cabeza->vendedor.Fecha_ingreso->mes << endl;
+            cout << " Score de ventas: " << this->cabeza->vendedor.score << endl;
+            actual = actual->prox;
+        }
     };
 };
 
