@@ -2,7 +2,14 @@
 #include <fstream>
 #include <string>
 
+// Para manejar el uso de los key arrows
+#include <conio.h>
+
 using namespace std;
+
+// Estructurar las clases
+//
+//
 class Articulo // objeto que va en la posicion de DATA del nodo
 {
 public:
@@ -151,6 +158,13 @@ public:
         }
     };
 };
+
+// void mostrarMenu(int opcion)
+// {
+//     system("cls"); // Limpiar el menu exhibido
+//     std::cout << "MENU: " << std::endl;
+//     std::cout << (opcion == 0 ? "> " : " ") << "Opcion 1" << std::endl;
+// }
 
 int main(int argc, char const *argv[])
 {
