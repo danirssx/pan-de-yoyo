@@ -10,7 +10,7 @@ public:
     float precio;
     long int cantidad;
     // falta por agregar receta;
-    // builder
+    // METODO
     void llenar(string id, string nombre, float precio, long int cantidad)
     {
         this->id = id;
@@ -25,6 +25,7 @@ class nodoa
 public:
     articulo data;
     nodoa *prox = NULL;
+    // builder
     nodoa(string id, string nombre, float precio, long int cantidad)
     {
         this->data.llenar(id, nombre, precio, cantidad);
@@ -35,7 +36,7 @@ class Larticulo
 {
 public:
     nodoa *cabeza = NULL;
-    // builder
+    // metodo
     void agregar(string id, string nombre, float precio, long int cantidad)
     {
 
@@ -50,19 +51,68 @@ public:
             }
             actual->prox = new nodoa(id, nombre, precio, cantidad);
         }
+    };
+    void imprimir()
+    { // no se va a tomar caso lista vacia, se supone que se imprime con algo
+
+        nodoa *actual = this->cabeza;
+        cout << "Articulos de la lista : " << endl;
+        while (actual != NULL)
+        {
+
+            cout << "Id: " << this->cabeza->data.id;
+            cout << " nombre: " << this->cabeza->data.nombre;
+            cout << " Precio: " << this->cabeza->data.precio;
+            cout << " Cantidad: " << this->cabeza->data.cantidad << endl;
+            actual = actual->prox;
+        }
+    };
+};
+
+class Fecha
+{
+    short int dia, mes, ano;
+    // builder
+    void llenar(short int dia, short int mes, short int ano)
+    {
+        this->dia = dia;
+        this->mes = mes;
+        this->ano = ano;
     }
+};
+class NyA // Nombre y Apellido
+{
+    string nombre, apellido;
+    void llenar(string nombre, string apellido)
+    {
+        this->nombre = nombre;
+        this->apellido = apellido;
+    };
+} class vendedor // objeto que va en la posicion de DATA del nodo
+{
+
+public:
+    long int cedula = 0;
+    string nombre = "";
+    Fecha Fecha_ingreso;
+    short int p_comision;
+    int score = 0;
+    // falta por agregar receta;
+    // METODO
+    void llenar(long int cedula, string nombre, Fecha fecha, short int p_comision)
+    {
+        this->cedula = cedula;
+        this->nombre = nombre;
+        this->Fecha_ingreso = fecha;
+        this->p_comision = p_comision;
+    };
 };
 
 int main(int argc, char const *argv[])
 {
     Larticulo *Productos = new Larticulo;
     Productos->agregar("A0001", "Donas Sabrosssas", 4.2, 66);
-
-    cout << "Datos del primer nodo de lista productos:" << endl;
-    cout << "Id: " << Productos->cabeza->data.id << endl;
-    cout << "nombre: " << Productos->cabeza->data.nombre << endl;
-    cout << "Precio: " << Productos->cabeza->data.precio << endl;
-    cout << "Cantidad: " << Productos->cabeza->data.cantidad << endl;
+    Productos->imprimir();
 
     return 0;
 }
