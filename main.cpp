@@ -208,6 +208,7 @@ void imprimirMenu()
     system("cls"); // Limpia la consola
 
     cout << "Bienvenido a Pan de Yoyo" << endl;
+    cout << "\n";
     cout << "\t1. Agrega un articulo" << endl;
     cout << "\t2. Imprime la lista de articulos" << endl;
     cout << "\t3. Salir" << endl;
