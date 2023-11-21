@@ -1,15 +1,35 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-
+#include <map> //NUEVA LIBRERIA
 // Para manejar el uso de los key arrows
 #include <conio.h>
 
 using namespace std;
+// MANEJO DE DIRECCIONES DE LA BASE DE DATOS
 
+map<string, string> directorio;
+
+void cargar_direcciones(string direccion)
+{
+    fstream archivo;
+    string linea;
+    string lista[5] = {"clientes", "vendedores", "productos", "materia_prima", "recetas"};
+    archivo.open(direccion, std::ios::in);
+    if (archivo.is_open())
+    {
+        int i = 0;
+        while (getline(archivo, linea))
+        {
+            directorio[lista[i]] = linea;
+            i++;
+        }
+        archivo.close();
+    }
+};
+//////////////////////////////////////////////
 // Estructurar las clases
-// ARTICULO
-//
+////// ARTICULO
 /////////////////////////////////////////////
 class Articulo // objeto que va en la posicion de DATA del nodo
 {
@@ -164,6 +184,31 @@ public:
 
             iterador++;
         }
+    };
+    /// Constructor, va a leer el ,txt y va a llenar la lista
+    Larticulo(string direccion)
+    {
+        fstream archivo;
+        string linea;
+        string id;
+        string nombre;
+        float precio;
+        long int cantidad;
+        archivo.open(direccion, std::ios::in);
+        if (archivo.is_open())
+        {
+            while (getline(archivo, linea)) // primera linea buscada
+            {
+                id = linea;
+                getline(archivo, linea);
+                nombre = linea;
+                getline(archivo, linea);
+                precio = stof(linea); // cast de libreria string
+                getline(archivo, linea);
+                cantidad = stoi(linea);
+                this->agregar(id, nombre, precio, cantidad);
+            }
+        };
     };
 
     // Desturctor para liberar la memoria
@@ -346,9 +391,10 @@ void imprimirMenu()
 //
 // ///////////////////
 int main(int argc, char const *argv[])
-{
+{ // guarda las direcciones en diccionario
+    cargar_direcciones("base_datos\\directorio.txt");
     // Declaracion
-    Larticulo *Productos = new Larticulo;
+    Larticulo *Productos = new Larticulo(directorio["productos"]);
 
     // Productos base para juguetear
     Productos->agregar("A0001", "Donas con Chocolate", 4.2, 66);
