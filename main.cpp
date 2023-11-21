@@ -8,8 +8,9 @@
 using namespace std;
 
 // Estructurar las clases
+// ARTICULO
 //
-//
+/////////////////////////////////////////////
 class Articulo // objeto que va en la posicion de DATA del nodo
 {
 public:
@@ -25,6 +26,14 @@ public:
         this->precio = precio;
         this->cantidad = cantidad;
     };
+};
+
+enum class editArticulo
+{
+    id,
+    nombre,
+    precio,
+    cantidad
 };
 
 class nodoa
@@ -84,8 +93,16 @@ public:
             actual->prox = new nodoa(id, nombre, precio, cantidad);
         }
     };
+
+    // Editar
+    void editarDato(int valor)
+    {
+        nodoa *actual = this->cabeza;
+    }
+
     void imprimir()
     { // no se va a tomar caso lista vacia, se supone que se imprime con algo
+        int iterador = 1;
 
         system("cls");
 
@@ -95,12 +112,15 @@ public:
 
         while (actual != NULL)
         {
+            cout << iterador << " |- ";
 
             cout << "Id: " << actual->articulo.id;
             cout << " nombre: " << actual->articulo.nombre;
             cout << " Precio: " << actual->articulo.precio;
             cout << " Cantidad: " << actual->articulo.cantidad << endl;
             actual = actual->prox;
+
+            iterador++;
         }
     };
 
@@ -119,7 +139,9 @@ public:
 };
 
 // Estructura de los vendedores:
-
+// VENDEDORES
+//
+// ///////////////////////////////////////
 struct Fecha
 {
     short int dia, mes, ano;
@@ -220,7 +242,6 @@ int main(int argc, char const *argv[])
     // Declaracion
     Larticulo *Productos = new Larticulo;
     Productos->agregar("A0001", "Donas Sabrosssas", 4.2, 66);
-
     // datos
     int opcion = -1;
     char tecla;
