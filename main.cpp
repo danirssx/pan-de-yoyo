@@ -220,13 +220,10 @@ int main(int argc, char const *argv[])
     // Declaracion
     Larticulo *Productos = new Larticulo;
     Productos->agregar("A0001", "Donas Sabrosssas", 4.2, 66);
-    Productos->imprimir();
 
     // datos
     int opcion = -1;
     char tecla;
-
-    tecla = _getch(); // Tiene que presionar una tecla para continuar
 
     // Menu
     while (opcion != 3)
@@ -246,6 +243,8 @@ int main(int argc, char const *argv[])
 
                 Productos->imprimir();
 
+                cout << "\nPresiona cualquier tecla para continuar...";
+
                 tecla = _getch(); // Tiene que presionar una tecla para continuar
                 break;
 
@@ -253,6 +252,10 @@ int main(int argc, char const *argv[])
                 // Lista
                 cout << "Lista de articulos" << endl;
                 Productos->imprimir();
+
+                cout << "\nPresiona cualquier tecla para continuar...";
+
+                tecla = _getch(); // Tiene que presionar una tecla para continuar
 
             default:
                 break;
