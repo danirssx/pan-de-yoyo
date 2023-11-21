@@ -28,14 +28,6 @@ public:
     };
 };
 
-enum class editArticulo
-{
-    id,
-    nombre,
-    precio,
-    cantidad
-};
-
 class nodoa
 {
 public:
@@ -95,9 +87,59 @@ public:
     };
 
     // Editar
-    void editarDato(int valor)
+    template <typename T>
+    void editarDato(T valor, int editar, int seleccion)
     {
+
+        // Me aseguro de que el valor es valido:
+        static_assert(is_same<T, int>::value || is_same<T, string>::value || is_same<T, float>::value, "Tipo de dato no compatible");
+
+        int iterador = 1;
         nodoa *actual = this->cabeza;
+
+        while (actual != NULL)
+        {
+            if (iterador == seleccion)
+            {
+                // Casos posibles para editar el valor
+                switch (editar)
+                {
+                case 1:
+                    if constexpr (is_same<T, string>::value)
+                    {
+                        actual->articulo.id = valor;
+                    }
+                    break;
+
+                case 2:
+                    if constexpr (is_same<T, string>::value)
+                    {
+                        actual->articulo.nombre = valor;
+                    }
+                    break;
+
+                case 3:
+                    if constexpr (is_same<T, float>::value)
+                    {
+                        actual->articulo.precio = valor;
+                    }
+                    break;
+
+                case 4:
+                    if constexpr (is_same<T, int>::value)
+                    {
+                        actual->articulo.cantidad = valor;
+                    }
+                    break;
+
+                default:
+                    break;
+                }
+            }
+
+            actual = actual->prox;
+            iterador++;
+        }
     }
 
     void imprimir()
@@ -115,9 +157,9 @@ public:
             cout << iterador << " |- ";
 
             cout << "Id: " << actual->articulo.id;
-            cout << " nombre: " << actual->articulo.nombre;
-            cout << " Precio: " << actual->articulo.precio;
-            cout << " Cantidad: " << actual->articulo.cantidad << endl;
+            cout << " | nombre: " << actual->articulo.nombre;
+            cout << " | Precio: " << actual->articulo.precio;
+            cout << " | Cantidad: " << actual->articulo.cantidad << endl;
             actual = actual->prox;
 
             iterador++;
@@ -225,6 +267,65 @@ public:
     };
 };
 
+// Crear el dato tipo template
+template <typename T>
+T inputValor()
+{
+    T valor;
+    return cin >> valor;
+};
+
+void editarFuncion(Larticulo *Productos)
+{
+    int intValor, editar, seleccion;
+    float floatValor;
+    string strValor;
+
+    // Menu funcionalidades
+    cout << "\nCual articulo desea modificar: ";
+    cin >> seleccion;
+
+    cout << "\nQue desea modificar? " << endl;
+    cout << "1 |- El ID" << endl;
+    cout << "2 |- El Nombre" << endl;
+    cout << "3 |- El Precio" << endl;
+    cout << "4 |- Su Cantidad" << endl;
+    cout << "\n";
+    cout << "Presione la opcion correcta: ";
+    cin >> editar;
+
+    cout << "\n Ingrese el valor a introducir: ";
+
+    // Introducir el valor
+    switch (editar)
+    {
+    //  El ID
+    case 1:
+    case 2:
+        cin >> strValor;
+        Productos->editarDato(strValor, editar, seleccion);
+
+        break;
+
+    case 3:
+        cin >> floatValor;
+        Productos->editarDato(floatValor, editar, seleccion);
+
+        break;
+
+    case 4:
+        cin >> intValor;
+        Productos->editarDato(intValor, editar, seleccion);
+        break;
+
+    default:
+        break;
+    };
+}
+
+// MENU
+//
+////////////////
 void imprimirMenu()
 {
     system("cls"); // Limpia la consola
@@ -233,10 +334,14 @@ void imprimirMenu()
     cout << "\n";
     cout << "\t1. Agrega un articulo" << endl;
     cout << "\t2. Imprime la lista de articulos" << endl;
-    cout << "\t3. Salir" << endl;
+    cout << "\t3. Edita un articulo de la lista" << endl;
+    cout << "\t4. Salir" << endl;
     return;
 }
 
+// MAIN
+//
+// ///////////////////
 int main(int argc, char const *argv[])
 {
     // Declaracion
@@ -247,13 +352,13 @@ int main(int argc, char const *argv[])
     char tecla;
 
     // Menu
-    while (opcion != 3)
+    while (opcion != 4)
     {
         imprimirMenu();
         cout << "\nIngresa la opcion: ";
         cin >> opcion;
 
-        if (opcion >= 0 & opcion <= 3)
+        if (opcion >= 0 & opcion <= 4)
         {
             switch (opcion)
             {
@@ -277,6 +382,19 @@ int main(int argc, char const *argv[])
                 cout << "\nPresiona cualquier tecla para continuar...";
 
                 tecla = _getch(); // Tiene que presionar una tecla para continuar
+                break;
+
+            case 3:
+                // Lista
+                cout << "Lista de articulos" << endl;
+                Productos->imprimir();
+
+                editarFuncion(Productos);
+
+                // Opciones distintas
+
+                tecla = _getch(); // Tiene que presionar una tecla para continuar
+                break;
 
             default:
                 break;
