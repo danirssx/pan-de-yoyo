@@ -92,7 +92,7 @@ public:
     {
 
         // Me aseguro de que el valor es valido:
-        static_assert(is_same<T, int>::value || is_same<T, string>::value || is_same<T, float>::value, "Tipo de dato no compatible");
+        // static_assert(is_same<T, int>::value || is_same<T, string>::value || is_same<T, float>::value, "Tipo de dato no compatible");
 
         int iterador = 1;
         nodoa *actual = this->cabeza;
@@ -301,10 +301,13 @@ void editarFuncion(Larticulo *Productos)
     {
     //  El ID
     case 1:
+        cin >> strValor;
+        Productos->editarDato(strValor, editar, seleccion);
+        break;
+
     case 2:
         cin >> strValor;
         Productos->editarDato(strValor, editar, seleccion);
-
         break;
 
     case 3:
@@ -346,7 +349,13 @@ int main(int argc, char const *argv[])
 {
     // Declaracion
     Larticulo *Productos = new Larticulo;
-    Productos->agregar("A0001", "Donas Sabrosssas", 4.2, 66);
+
+    // Productos base para juguetear
+    Productos->agregar("A0001", "Donas con Chocolate", 4.2, 66);
+    Productos->agregar("A0002", "Tartaleta de Manzana", 6, 45);
+    Productos->agregar("A0003", "Quesillo", 3, 12);
+    Productos->agregar("A0004", "Galletas de Avena", 2, 124);
+
     // datos
     int opcion = -1;
     char tecla;
