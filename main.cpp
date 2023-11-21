@@ -106,7 +106,65 @@ public:
         }
     };
 
-    // Editar
+    // EDICION
+    //
+    //
+
+    // EditarFuncion
+    void editarFuncion()
+    {
+        {
+            int intValor, editar, seleccion;
+            float floatValor;
+            string strValor;
+
+            // Menu funcionalidades
+            cout << "\nCual articulo desea modificar: ";
+            cin >> seleccion;
+
+            cout << "\nQue desea modificar? " << endl;
+            cout << "1 |- El ID" << endl;
+            cout << "2 |- El Nombre" << endl;
+            cout << "3 |- El Precio" << endl;
+            cout << "4 |- Su Cantidad" << endl;
+            cout << "\n";
+            cout << "Presione la opcion correcta: ";
+            cin >> editar;
+
+            cout << "\n Ingrese el valor a introducir: ";
+
+            // Introducir el valor
+            switch (editar)
+            {
+            //  El ID
+            case 1:
+                cin >> strValor;
+                editarDato(strValor, editar, seleccion);
+                break;
+
+            case 2:
+                cin >> strValor;
+                editarDato(strValor, editar, seleccion);
+                break;
+
+            case 3:
+                cin >> floatValor;
+                editarDato(floatValor, editar, seleccion);
+
+                break;
+
+            case 4:
+                cin >> intValor;
+                editarDato(intValor, editar, seleccion);
+                break;
+
+            default:
+                break;
+            };
+        }
+    }
+
+    // EditarHelper
     template <typename T>
     void editarDato(T valor, int editar, int seleccion)
     {
@@ -320,57 +378,6 @@ T inputValor()
     return cin >> valor;
 };
 
-void editarFuncion(Larticulo *Productos)
-{
-    int intValor, editar, seleccion;
-    float floatValor;
-    string strValor;
-
-    // Menu funcionalidades
-    cout << "\nCual articulo desea modificar: ";
-    cin >> seleccion;
-
-    cout << "\nQue desea modificar? " << endl;
-    cout << "1 |- El ID" << endl;
-    cout << "2 |- El Nombre" << endl;
-    cout << "3 |- El Precio" << endl;
-    cout << "4 |- Su Cantidad" << endl;
-    cout << "\n";
-    cout << "Presione la opcion correcta: ";
-    cin >> editar;
-
-    cout << "\n Ingrese el valor a introducir: ";
-
-    // Introducir el valor
-    switch (editar)
-    {
-    //  El ID
-    case 1:
-        cin >> strValor;
-        Productos->editarDato(strValor, editar, seleccion);
-        break;
-
-    case 2:
-        cin >> strValor;
-        Productos->editarDato(strValor, editar, seleccion);
-        break;
-
-    case 3:
-        cin >> floatValor;
-        Productos->editarDato(floatValor, editar, seleccion);
-
-        break;
-
-    case 4:
-        cin >> intValor;
-        Productos->editarDato(intValor, editar, seleccion);
-        break;
-
-    default:
-        break;
-    };
-}
-
 // MENU
 //
 ////////////////
@@ -395,12 +402,6 @@ int main(int argc, char const *argv[])
     cargar_direcciones("base_datos\\directorio.txt");
     // Declaracion
     Larticulo *Productos = new Larticulo(directorio["productos"]);
-
-    // Productos base para juguetear
-    Productos->agregar("A0001", "Donas con Chocolate", 4.2, 66);
-    Productos->agregar("A0002", "Tartaleta de Manzana", 6, 45);
-    Productos->agregar("A0003", "Quesillo", 3, 12);
-    Productos->agregar("A0004", "Galletas de Avena", 2, 124);
 
     // datos
     int opcion = -1;
@@ -444,7 +445,7 @@ int main(int argc, char const *argv[])
                 cout << "Lista de articulos" << endl;
                 Productos->imprimir();
 
-                editarFuncion(Productos);
+                Productos->editarFuncion();
 
                 // Opciones distintas
 
