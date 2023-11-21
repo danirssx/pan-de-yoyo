@@ -114,59 +114,163 @@ public:
     void editarFuncion()
     {
         {
-            int intValor, editar, select;
-            float floatValor;
-            string strValor;
+            int numNodo = 0;
+            int intBuscar, intValor, opcion, editarValor;
+            float floatBuscar, floatValor;
+            string strBuscar, strValor;
 
             // Menu funcionalidades
-            cout << "\nCual articulo desea modificar: ";
-            cin >> select;
-
-            cout << "\nQue desea modificar? " << endl;
-            cout << "1 |- El ID" << endl;
-            cout << "2 |- El Nombre" << endl;
-            cout << "3 |- El Precio" << endl;
-            cout << "4 |- Su Cantidad" << endl;
+            cout << "\nCual modalidad de busqueda deseas aplicar?";
+            cout << "\n\n";
+            cout << "1 |- Por indice" << endl;
+            cout << "2 |- Por ID" << endl;
+            cout << "3 |- Por Nombre" << endl;
+            cout << "4 |- Por Precios" << endl;
+            cout << "5 |- Por Cantidades" << endl;
             cout << "\n";
-            cout << "Presione la opcion correcta: ";
-            cin >> editar;
+            cin >> opcion;
 
-            cout << "\n Ingrese el valor a introducir: ";
-
-            // Introducir el valor
-            switch (editar)
+            switch (opcion)
             {
-            //  El ID
             case 1:
-                cin >> strValor;
-                editarDato(strValor, editar, select);
+                cout << "\nCual articulo desea modificar: ";
+                cin >> numNodo;
                 break;
-
             case 2:
-                cin >> strValor;
-                editarDato(strValor, editar, select);
+                cout << "\nIngresa el ID a buscar: ";
+                cin >> strBuscar;
+                buscarDato(strBuscar, opcion, numNodo);
                 break;
-
             case 3:
-                cin >> floatValor;
-                editarDato(floatValor, editar, select);
-
+                cout << "\nIngresa el nombre a buscar: ";
+                cin >> strBuscar;
+                buscarDato(strBuscar, opcion, numNodo);
                 break;
-
             case 4:
-                cin >> intValor;
-                editarDato(intValor, editar, select);
+                cout << "\nIngresa el precio a buscar: ";
+                cin >> floatBuscar;
+                buscarDato(floatBuscar, opcion, numNodo);
+                break;
+            case 5:
+                cout << "\nIngresa la cantidad especifica a buscar: ";
+                cin >> intBuscar;
+                buscarDato(intBuscar, opcion, numNodo);
                 break;
 
             default:
                 break;
-            };
+            }
+
+            imprimir(numNodo);
+
+            if (numNodo != 0)
+            {
+                cout << "\nQue desea modificar? " << endl;
+                cout << "1 |- El ID" << endl;
+                cout << "2 |- El Nombre" << endl;
+                cout << "3 |- El Precio" << endl;
+                cout << "4 |- Su Cantidad" << endl;
+                cout << "\n";
+                cout << "Presione la opcion correcta: ";
+                cin >> editarValor;
+
+                cout << "\n Ingrese el valor a introducir: ";
+
+                // Introducir el valor
+                switch (editarValor)
+                {
+                //  El ID
+                case 1:
+                    cin >> strValor;
+                    editarDato(strValor, editarValor, numNodo);
+                    break;
+
+                case 2:
+                    cin >> strValor;
+                    editarDato(strValor, editarValor, numNodo);
+                    break;
+
+                case 3:
+                    cin >> floatValor;
+                    editarDato(floatValor, editarValor, numNodo);
+
+                    break;
+
+                case 4:
+                    cin >> intValor;
+                    editarDato(intValor, editarValor, numNodo);
+                    break;
+
+                default:
+                    break;
+                };
+            }
+            else
+            {
+                cout << "\nNo se consiguio ningun producto con esas caracteristicas..." << endl;
+                _getch(); // Tiene que presionar una tecla para continuar
+            }
+        }
+    }
+
+    // BuscarHelper
+    template <typename T>
+    void buscarDato(T valor, int opcion, int &numNodo)
+    {
+        nodoa *actual = this->cabeza;
+        bool encontrado = false;
+
+        if (opcion > 1 && opcion <= 5)
+        {
+            while (actual != NULL && !encontrado)
+            {
+                // Encontrado por id o por nombre
+                if constexpr (is_same<T, string>::value)
+                {
+                    if (actual->articulo.id == valor || actual->articulo.nombre == valor)
+                    {
+                        encontrado = true;
+                    }
+                }
+
+                // Encontrado por precio
+                if constexpr (is_same<T, float>::value)
+                {
+                    if (actual->articulo.precio == valor)
+                    {
+                        encontrado = true;
+                    }
+                }
+
+                // Encontrado por cantidad
+                if constexpr (is_same<T, int>::value)
+                {
+                    if (actual->articulo.cantidad == valor)
+                    {
+                        encontrado = true;
+                    }
+                }
+
+                actual = actual->prox;
+                numNodo++;
+            }
+
+            // En caso de no encontrar nada
+            if (!encontrado)
+            {
+                numNodo = 0;
+            }
+            else
+            {
+                cout << "\nValor encontrado!! " << endl;
+                _getch(); // Tiene que presionar una tecla para continuar
+            }
         }
     }
 
     // EditarHelper
     template <typename T>
-    void editarDato(T valor, int editar, int select)
+    void editarDato(T valor, int editar, int &numNodo)
     {
 
         // Me aseguro de que el valor es valido:
@@ -177,7 +281,7 @@ public:
 
         while (actual != NULL)
         {
-            if (iterador == select)
+            if (iterador == numNodo)
             {
                 // Casos posibles para editar el valor
                 switch (editar)
@@ -220,7 +324,9 @@ public:
         }
     }
 
-    // Sumar
+    // Sumar y Restar
+    //
+    //
     void operacion(int select, bool sumar = true)
     {
 
@@ -242,7 +348,7 @@ public:
     //
     //
 
-    void imprimir()
+    void imprimir(int personalizado = 0)
     {
         int iterador = 1;
 
@@ -252,17 +358,37 @@ public:
         cout << "\nArticulos de la lista : " << endl;
         cout << "\n";
 
-        while (actual != NULL)
+        if (personalizado == 0)
         {
-            cout << iterador << " |- ";
+            while (actual != NULL)
+            {
+                cout << iterador << " |- ";
 
-            cout << "Id: " << actual->articulo.id;
-            cout << " | nombre: " << actual->articulo.nombre;
-            cout << " | Precio: " << actual->articulo.precio;
-            cout << " | Cantidad: " << actual->articulo.cantidad << endl;
-            actual = actual->prox;
+                cout << "Id: " << actual->articulo.id;
+                cout << " | nombre: " << actual->articulo.nombre;
+                cout << " | Precio: " << actual->articulo.precio;
+                cout << " | Cantidad: " << actual->articulo.cantidad << endl;
+                actual = actual->prox;
 
-            iterador++;
+                iterador++;
+            }
+        }
+        else
+        {
+            while (actual != NULL)
+            {
+                if (personalizado == iterador)
+                {
+                    cout << iterador << " |- ";
+
+                    cout << "Id: " << actual->articulo.id;
+                    cout << " | nombre: " << actual->articulo.nombre;
+                    cout << " | Precio: " << actual->articulo.precio;
+                    cout << " | Cantidad: " << actual->articulo.cantidad << endl;
+                }
+                actual = actual->prox;
+                iterador++;
+            }
         }
     };
 
