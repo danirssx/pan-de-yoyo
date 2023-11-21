@@ -159,13 +159,6 @@ public:
     };
 };
 
-// void mostrarMenu(int opcion)
-// {
-//     system("cls"); // Limpiar el menu exhibido
-//     std::cout << "MENU: " << std::endl;
-//     std::cout << (opcion == 0 ? "> " : " ") << "Opcion 1" << std::endl;
-// }
-
 int main(int argc, char const *argv[])
 {
     Larticulo *Productos = new Larticulo;
