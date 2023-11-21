@@ -1,0 +1,5 @@
+base_datos\\clientes.txt
+base_datos\\vendedores.txt
+base_datos\\productos.txt
+base_datos\\materia_prima.txt
+base_datos\\recetas.txt
