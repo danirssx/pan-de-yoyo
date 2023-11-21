@@ -43,6 +43,31 @@ class Larticulo
 {
 public:
     nodoa *cabeza = NULL;
+    // Llenado del usuario
+    void pedirDatos()
+    {
+        string id, nombre;
+        float precio;
+        long int cantidad;
+
+        system("cls");
+
+        cout << "Ingresa el ID: ";
+        cin >> id;
+
+        cout << "Ingresa el Nombre: ";
+        cin >> nombre;
+
+        cout << "Ingresa el precio: ";
+        cin >> precio;
+
+        cout << "Ingresa la cantidad de elementos: ";
+        cin >> cantidad;
+
+        // Es momento de agregar los datos del producto:
+        agregar(id, nombre, precio, cantidad);
+    };
+
     // metodo
     void agregar(string id, string nombre, float precio, long int cantidad)
     {
@@ -62,19 +87,38 @@ public:
     void imprimir()
     { // no se va a tomar caso lista vacia, se supone que se imprime con algo
 
+        system("cls");
+
         nodoa *actual = this->cabeza;
-        cout << "Articulos de la lista : " << endl;
+        cout << "\nArticulos de la lista : " << endl;
+        cout << "\n";
+
         while (actual != NULL)
         {
 
-            cout << "Id: " << this->cabeza->articulo.id;
-            cout << " nombre: " << this->cabeza->articulo.nombre;
-            cout << " Precio: " << this->cabeza->articulo.precio;
-            cout << " Cantidad: " << this->cabeza->articulo.cantidad << endl;
+            cout << "Id: " << actual->articulo.id;
+            cout << " nombre: " << actual->articulo.nombre;
+            cout << " Precio: " << actual->articulo.precio;
+            cout << " Cantidad: " << actual->articulo.cantidad << endl;
             actual = actual->prox;
         }
     };
+
+    // Desturctor para liberar la memoria
+    ~Larticulo()
+    {
+        nodoa *actual = this->cabeza;
+        while (actual != NULL)
+        {
+            nodoa *temp = actual;
+            actual = actual->prox;
+            delete temp;
+        }
+        this->cabeza = NULL; // Establecer cabeza como NULL
+    }
 };
+
+// Estructura de los vendedores:
 
 struct Fecha
 {
@@ -159,11 +203,61 @@ public:
     };
 };
 
+void imprimirMenu()
+{
+    system("cls"); // Limpia la consola
+
+    cout << "Bienvenido a Pan de Yoyo" << endl;
+    cout << "\t1. Agrega un articulo" << endl;
+    cout << "\t2. Imprime la lista de articulos" << endl;
+    cout << "\t3. Salir" << endl;
+    return;
+}
+
 int main(int argc, char const *argv[])
 {
+    // Declaracion
     Larticulo *Productos = new Larticulo;
     Productos->agregar("A0001", "Donas Sabrosssas", 4.2, 66);
     Productos->imprimir();
+
+    // datos
+    int opcion = -1;
+    char tecla;
+
+    tecla = _getch(); // Tiene que presionar una tecla para continuar
+
+    // Menu
+    while (opcion != 3)
+    {
+        imprimirMenu();
+        cout << "\nIngresa la opcion: ";
+        cin >> opcion;
+
+        if (opcion >= 0 & opcion <= 3)
+        {
+            switch (opcion)
+            {
+            case 1:
+                // Agregar un articulo
+                cout << "Ingresa la data del articulo: " << endl;
+                Productos->pedirDatos();
+
+                Productos->imprimir();
+
+                tecla = _getch(); // Tiene que presionar una tecla para continuar
+                break;
+
+            case 2:
+                // Lista
+                cout << "Lista de articulos" << endl;
+                Productos->imprimir();
+
+            default:
+                break;
+            }
+        }
+    }
 
     return 0;
 }
