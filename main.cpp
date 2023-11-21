@@ -1,182 +1,36 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <map> //NUEVA LIBRERIA
+// Para manejar el uso de los key arrows
+#include <conio.h>
 
 using namespace std;
+// MANEJO DE DIRECCIONES DE LA BASE DE DATOS
 
-struct Articulo
+map<string, string> directorio;
+
+void cargar_direcciones(string direccion)
 {
-    string id;
-    string nombre;
-    int cantidad;
-    float precio;
-};
-
-struct Node
-{
-    // int id;
-    Articulo articulo;
-    Node *next;
-};
-
-Node *crear_nodo_articulo(Articulo articulo)
-{
-
-    Node *new_node = new Node;
-
-    if (new_node)
+    fstream archivo;
+    string linea;
+    string lista[5] = {"clientes", "vendedores", "productos", "materia_prima", "recetas"};
+    archivo.open(direccion, std::ios::in);
+    if (archivo.is_open())
     {
-        new_node->articulo = articulo;
-        new_node->next = NULL;
-    }
-    else
-    {
-        cerr << "Error creating new node." << endl;
-    }
-
-    return new_node;
-}
-
-// Crear articulo con data dada por el usuario
-Articulo crear_articulo(void)
-{
-
-    Articulo nuevo_articulo; // Crear un objeto para el nuevo artículo
-
-    // Crear id dinámicamente en base a la categoría del producto
-    // Lógica para asignar ID automáticamente ...
-
-    // FALTA VALIDAR DATOS
-    cout << "ID del articulo: ";
-    cin >> nuevo_articulo.id;
-
-    cout << "Nombre del articulo: ";
-    cin >> nuevo_articulo.nombre;
-    // ! OJO
-    cin.ignore(); // Ignore any previous newline character in the buffer
-    getline(cin, nuevo_articulo.nombre);
-
-    cout << "Precio del articulo: ";
-    cin >> nuevo_articulo.precio;
-
-    cout << "Cantidad del articulo: ";
-    cin >> nuevo_articulo.cantidad;
-
-    return nuevo_articulo;
-}
-
-// Add to list end
-void agregar_articulo_lista(Node **headRef, Articulo articulo)
-{
-    Node *current = *headRef;
-    Node *new_node = crear_nodo_articulo(articulo);
-
-    // If list is empty
-    if (current == NULL)
-    {
-        *headRef = new_node;
-    }
-    else
-    {
-        while (current->next != NULL)
+        int i = 0;
+        while (getline(archivo, linea))
         {
-            current = current->next;
+            directorio[lista[i]] = linea;
+            i++;
         }
-
-        // Add new article as the last element
-        current->next = new_node;
+        archivo.close();
     }
-}
-
-// FALTA CARGAR LA LISTA CON EL ARCHIVO
-
-void agregar_articulo_archivo(Articulo nuevo_articulo)
-{
-    ofstream file("articulos.txt", ios::app);
-
-    if (file.is_open())
-    {
-        file << nuevo_articulo.id << endl;
-        file << nuevo_articulo.nombre << endl;
-        file << nuevo_articulo.precio << endl;
-        file << nuevo_articulo.cantidad << endl;
-
-        file.close();
-        cout << "Articulo agregado exitosamente.\n";
-    }
-    else
-    {
-        cerr << "Error opening the file." << endl;
-    }
-}
-
-void print_list(Node *head)
-{
-
-    Node *current = head;
-
-    while (current != NULL)
-    {
-        cout << "ID: " << current->articulo.id << endl;
-        cout << "Nombre: " << current->articulo.nombre << endl;
-        cout << "Precio: " << current->articulo.precio << endl;
-        cout << "Cantidad: " << current->articulo.cantidad << endl;
-        cout << "----------------------" << endl;
-
-        current = current->next;
-    }
-}
-
-void printMenu()
-{
-    cout << "Bienvenido a Pan de Yoyo" << endl;
-    cout << "\t1. Agrega un articulo" << endl;
-    cout << "\t2. Imprime la lista de articulos" << endl;
-    cout << "\t3. Salir" << endl;
-    return;
-}
-
-int main(int argc, char **argv)
-{
-    Node *head = NULL;
-    int option = -1;
-    Articulo articulo;
-
-    while (option != 3)
-    {
-        printMenu();
-        int num_received = scanf("%d", &option);
-
-        if (num_received == 1 && option > 0 && option <= 3)
-        {
-            switch (option)
-            {
-            case 1:
-                // Agregar articulo
-                cout << "Ingresa la data del articulo" << endl;
-                articulo = crear_articulo();
-                agregar_articulo_lista(&head, articulo);
-                agregar_articulo_archivo(articulo);
-                break;
-
-            case 2:
-                cout << "Lista de articulos" << endl;
-                print_list(head);
-                break;
-
-            default:
-                break;
-            }
-        }
-    }
-
-    return 0;
-}
-#include <iostream>
-#include <fstream>
-#include <string>
-
-using namespace std;
+};
+//////////////////////////////////////////////
+// Estructurar las clases
+////// ARTICULO
+/////////////////////////////////////////////
 class Articulo // objeto que va en la posicion de DATA del nodo
 {
 public:
@@ -210,6 +64,31 @@ class Larticulo
 {
 public:
     nodoa *cabeza = NULL;
+    // Llenado del usuario
+    void pedirDatos()
+    {
+        string id, nombre;
+        float precio;
+        long int cantidad;
+
+        system("cls");
+
+        cout << "Ingresa el ID: ";
+        cin >> id;
+
+        cout << "Ingresa el Nombre: ";
+        cin >> nombre;
+
+        cout << "Ingresa el precio: ";
+        cin >> precio;
+
+        cout << "Ingresa la cantidad de elementos: ";
+        cin >> cantidad;
+
+        // Es momento de agregar los datos del producto:
+        agregar(id, nombre, precio, cantidad);
+    };
+
     // metodo
     void agregar(string id, string nombre, float precio, long int cantidad)
     {
@@ -226,23 +105,130 @@ public:
             actual->prox = new nodoa(id, nombre, precio, cantidad);
         }
     };
-    void imprimir()
-    { // no se va a tomar caso lista vacia, se supone que se imprime con algo
 
+    // Editar
+    template <typename T>
+    void editarDato(T valor, int editar, int seleccion)
+    {
+
+        // Me aseguro de que el valor es valido:
+        // static_assert(is_same<T, int>::value || is_same<T, string>::value || is_same<T, float>::value, "Tipo de dato no compatible");
+
+        int iterador = 1;
         nodoa *actual = this->cabeza;
-        cout << "Articulos de la lista : " << endl;
+
         while (actual != NULL)
         {
+            if (iterador == seleccion)
+            {
+                // Casos posibles para editar el valor
+                switch (editar)
+                {
+                case 1:
+                    if constexpr (is_same<T, string>::value)
+                    {
+                        actual->articulo.id = valor;
+                    }
+                    break;
 
-            cout << "Id: " << this->cabeza->articulo.id;
-            cout << " nombre: " << this->cabeza->articulo.nombre;
-            cout << " Precio: " << this->cabeza->articulo.precio;
-            cout << " Cantidad: " << this->cabeza->articulo.cantidad << endl;
+                case 2:
+                    if constexpr (is_same<T, string>::value)
+                    {
+                        actual->articulo.nombre = valor;
+                    }
+                    break;
+
+                case 3:
+                    if constexpr (is_same<T, float>::value)
+                    {
+                        actual->articulo.precio = valor;
+                    }
+                    break;
+
+                case 4:
+                    if constexpr (is_same<T, int>::value)
+                    {
+                        actual->articulo.cantidad = valor;
+                    }
+                    break;
+
+                default:
+                    break;
+                }
+            }
+
             actual = actual->prox;
+            iterador++;
+        }
+    }
+
+    void imprimir()
+    { // no se va a tomar caso lista vacia, se supone que se imprime con algo
+        int iterador = 1;
+
+        system("cls");
+
+        nodoa *actual = this->cabeza;
+        cout << "\nArticulos de la lista : " << endl;
+        cout << "\n";
+
+        while (actual != NULL)
+        {
+            cout << iterador << " |- ";
+
+            cout << "Id: " << actual->articulo.id;
+            cout << " | nombre: " << actual->articulo.nombre;
+            cout << " | Precio: " << actual->articulo.precio;
+            cout << " | Cantidad: " << actual->articulo.cantidad << endl;
+            actual = actual->prox;
+
+            iterador++;
         }
     };
+    /// Constructor, va a leer el ,txt y va a llenar la lista
+    Larticulo(string direccion)
+    {
+        fstream archivo;
+        string linea;
+        string id;
+        string nombre;
+        float precio;
+        long int cantidad;
+        archivo.open(direccion, std::ios::in);
+        if (archivo.is_open())
+        {
+            while (getline(archivo, linea)) // primera linea buscada
+            {
+                id = linea;
+                getline(archivo, linea);
+                nombre = linea;
+                getline(archivo, linea);
+                precio = stof(linea); // cast de libreria string
+                getline(archivo, linea);
+                cantidad = stoi(linea);
+                this->agregar(id, nombre, precio, cantidad);
+            }
+        };
+    };
+
+    // Desturctor para liberar la memoria
+    ~Larticulo()
+    {
+        nodoa *actual = this->cabeza;
+        while (actual != NULL)
+        {
+            nodoa *temp = actual;
+            actual = actual->prox;
+            delete temp;
+        }
+        this->cabeza = NULL; // Establecer cabeza como NULL
+    }
 };
 
+// Estructura de los vendedores:
+// VENDEDORES
+//
+// ///////////////////////////////////////
 struct Fecha
 {
     short int dia, mes, ano;
@@ -326,11 +312,150 @@ public:
     };
 };
 
-int main(int argc, char const *argv[])
+// Crear el dato tipo template
+template <typename T>
+T inputValor()
 {
-    Larticulo *Productos = new Larticulo;
-    Productos->agregar("A0001", "Donas Sabrosssas", 4.2, 66);
-    Productos->imprimir();
+    T valor;
+    return cin >> valor;
+};
+
+void editarFuncion(Larticulo *Productos)
+{
+    int intValor, editar, seleccion;
+    float floatValor;
+    string strValor;
+
+    // Menu funcionalidades
+    cout << "\nCual articulo desea modificar: ";
+    cin >> seleccion;
+
+    cout << "\nQue desea modificar? " << endl;
+    cout << "1 |- El ID" << endl;
+    cout << "2 |- El Nombre" << endl;
+    cout << "3 |- El Precio" << endl;
+    cout << "4 |- Su Cantidad" << endl;
+    cout << "\n";
+    cout << "Presione la opcion correcta: ";
+    cin >> editar;
+
+    cout << "\n Ingrese el valor a introducir: ";
+
+    // Introducir el valor
+    switch (editar)
+    {
+    //  El ID
+    case 1:
+        cin >> strValor;
+        Productos->editarDato(strValor, editar, seleccion);
+        break;
+
+    case 2:
+        cin >> strValor;
+        Productos->editarDato(strValor, editar, seleccion);
+        break;
+
+    case 3:
+        cin >> floatValor;
+        Productos->editarDato(floatValor, editar, seleccion);
+
+        break;
+
+    case 4:
+        cin >> intValor;
+        Productos->editarDato(intValor, editar, seleccion);
+        break;
+
+    default:
+        break;
+    };
+}
+
+// MENU
+//
+////////////////
+void imprimirMenu()
+{
+    system("cls"); // Limpia la consola
+
+    cout << "Bienvenido a Pan de Yoyo" << endl;
+    cout << "\n";
+    cout << "\t1. Agrega un articulo" << endl;
+    cout << "\t2. Imprime la lista de articulos" << endl;
+    cout << "\t3. Edita un articulo de la lista" << endl;
+    cout << "\t4. Salir" << endl;
+    return;
+}
+
+// MAIN
+//
+// ///////////////////
+int main(int argc, char const *argv[])
+{ // guarda las direcciones en diccionario
+    cargar_direcciones("base_datos\\directorio.txt");
+    // Declaracion
+    Larticulo *Productos = new Larticulo(directorio["productos"]);
+
+    // Productos base para juguetear
+    Productos->agregar("A0001", "Donas con Chocolate", 4.2, 66);
+    Productos->agregar("A0002", "Tartaleta de Manzana", 6, 45);
+    Productos->agregar("A0003", "Quesillo", 3, 12);
+    Productos->agregar("A0004", "Galletas de Avena", 2, 124);
+
+    // datos
+    int opcion = -1;
+    char tecla;
+
+    // Menu
+    while (opcion != 4)
+    {
+        imprimirMenu();
+        cout << "\nIngresa la opcion: ";
+        cin >> opcion;
+
+        if (opcion >= 0 & opcion <= 4)
+        {
+            switch (opcion)
+            {
+            case 1:
+                // Agregar un articulo
+                cout << "Ingresa la data del articulo: " << endl;
+                Productos->pedirDatos();
+
+                Productos->imprimir();
+
+                cout << "\nPresiona cualquier tecla para continuar...";
+
+                tecla = _getch(); // Tiene que presionar una tecla para continuar
+                break;
+
+            case 2:
+                // Lista
+                cout << "Lista de articulos" << endl;
+                Productos->imprimir();
+
+                cout << "\nPresiona cualquier tecla para continuar...";
+
+                tecla = _getch(); // Tiene que presionar una tecla para continuar
+                break;
+
+            case 3:
+                // Lista
+                cout << "Lista de articulos" << endl;
+                Productos->imprimir();
+
+                editarFuncion(Productos);
+
+                // Opciones distintas
+
+                tecla = _getch(); // Tiene que presionar una tecla para continuar
+                break;
+
+            default:
+                break;
+            }
+        }
+    }
 
     return 0;
 }
