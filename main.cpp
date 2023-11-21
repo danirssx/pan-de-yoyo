@@ -114,13 +114,13 @@ public:
     void editarFuncion()
     {
         {
-            int intValor, editar, seleccion;
+            int intValor, editar, select;
             float floatValor;
             string strValor;
 
             // Menu funcionalidades
             cout << "\nCual articulo desea modificar: ";
-            cin >> seleccion;
+            cin >> select;
 
             cout << "\nQue desea modificar? " << endl;
             cout << "1 |- El ID" << endl;
@@ -139,23 +139,23 @@ public:
             //  El ID
             case 1:
                 cin >> strValor;
-                editarDato(strValor, editar, seleccion);
+                editarDato(strValor, editar, select);
                 break;
 
             case 2:
                 cin >> strValor;
-                editarDato(strValor, editar, seleccion);
+                editarDato(strValor, editar, select);
                 break;
 
             case 3:
                 cin >> floatValor;
-                editarDato(floatValor, editar, seleccion);
+                editarDato(floatValor, editar, select);
 
                 break;
 
             case 4:
                 cin >> intValor;
-                editarDato(intValor, editar, seleccion);
+                editarDato(intValor, editar, select);
                 break;
 
             default:
@@ -166,7 +166,7 @@ public:
 
     // EditarHelper
     template <typename T>
-    void editarDato(T valor, int editar, int seleccion)
+    void editarDato(T valor, int editar, int select)
     {
 
         // Me aseguro de que el valor es valido:
@@ -177,7 +177,7 @@ public:
 
         while (actual != NULL)
         {
-            if (iterador == seleccion)
+            if (iterador == select)
             {
                 // Casos posibles para editar el valor
                 switch (editar)
@@ -220,8 +220,30 @@ public:
         }
     }
 
+    // Sumar
+    void operacion(int select, bool sumar = true)
+    {
+
+        int iterador = 1;
+        nodoa *actual = this->cabeza;
+
+        while (actual != NULL)
+        {
+            if (iterador == select)
+            {
+                sumar ? actual->articulo.cantidad++ : actual->articulo.cantidad--;
+            }
+            actual = actual->prox;
+            iterador++;
+        }
+    }
+
+    // HELPERS
+    //
+    //
+
     void imprimir()
-    { // no se va a tomar caso lista vacia, se supone que se imprime con algo
+    {
         int iterador = 1;
 
         system("cls");
@@ -243,6 +265,10 @@ public:
             iterador++;
         }
     };
+
+    // LECTURA DE DATOS
+    //
+    //
     /// Constructor, va a leer el ,txt y va a llenar la lista
     Larticulo(string direccion)
     {
@@ -269,6 +295,9 @@ public:
         };
     };
 
+    // LIBERACION MEMORIA
+    //
+    //
     // Desturctor para liberar la memoria
     ~Larticulo()
     {
@@ -390,7 +419,8 @@ void imprimirMenu()
     cout << "\t1. Agrega un articulo" << endl;
     cout << "\t2. Imprime la lista de articulos" << endl;
     cout << "\t3. Edita un articulo de la lista" << endl;
-    cout << "\t4. Salir" << endl;
+    cout << "\t4. Sumar o Restar un producto de la lista" << endl;
+    cout << "\t5. Salir" << endl;
     return;
 }
 
@@ -408,13 +438,13 @@ int main(int argc, char const *argv[])
     char tecla;
 
     // Menu
-    while (opcion != 4)
+    while (opcion != 5)
     {
         imprimirMenu();
         cout << "\nIngresa la opcion: ";
         cin >> opcion;
 
-        if (opcion >= 0 & opcion <= 4)
+        if (opcion >= 0 & opcion <= 5)
         {
             switch (opcion)
             {
@@ -446,6 +476,38 @@ int main(int argc, char const *argv[])
                 Productos->imprimir();
 
                 Productos->editarFuncion();
+
+                // Opciones distintas
+
+                tecla = _getch(); // Tiene que presionar una tecla para continuar
+                break;
+
+            case 4:
+                // Lista
+                cout << "Lista de articulos" << endl;
+                Productos->imprimir();
+
+                int editarNodo, opcionOperacion;
+
+                cout << "\nCual Nodo deseas modificar: ";
+                cin >> editarNodo;
+
+                cout << "\nDeseas restar o sumar?";
+                cout << "\n1. |- Sumar";
+                cout << "\n2. |- Restar";
+
+                cout << "\nIngresa el valor: ";
+                cin >> opcionOperacion;
+
+                if (opcionOperacion == 1)
+                {
+                    Productos->operacion(editarNodo);
+                };
+
+                if (opcionOperacion == 2)
+                {
+                    Productos->operacion(editarNodo, false);
+                }
 
                 // Opciones distintas
 
