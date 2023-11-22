@@ -229,9 +229,12 @@ public:
                 archivo << actual->articulo.nombre << "\n";
                 archivo << actual->articulo.precio << "\n";
                 archivo << actual->articulo.cantidad << "\n";
+                actual = actual->prox;
             }
+            archivo.close();
         }
     };
+
     // Desturctor para liberar la memoria
     ~Larticulo()
     {
