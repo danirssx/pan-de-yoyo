@@ -536,17 +536,44 @@ T inputValor()
 // MENU
 //
 ////////////////
-void imprimirMenu()
+void imprimirMenu(int opcion = 0)
 {
     system("cls"); // Limpia la consola
 
-    cout << "Bienvenido a Pan de Yoyo" << endl;
-    cout << "\n";
-    cout << "\t1. Agrega un articulo" << endl;
-    cout << "\t2. Imprime la lista de articulos" << endl;
-    cout << "\t3. Edita un articulo de la lista" << endl;
-    cout << "\t4. Sumar o Restar un producto de la lista" << endl;
-    cout << "\t5. Salir" << endl;
+    switch (opcion)
+    {
+    case 0:
+        cout << "Bienvenido a Pan de Yoyo" << endl;
+        cout << "\n";
+        cout << "\t1. Articulos" << endl;
+        cout << "\t2. Vendedores" << endl;
+        cout << "\t3. Salir" << endl;
+        break;
+
+    case 1:
+
+        cout << "Bienvenido a Pan de Yoyo" << endl;
+        cout << "\n";
+        cout << "\t1. Agrega un articulo" << endl;
+        cout << "\t2. Imprime la lista de articulos" << endl;
+        cout << "\t3. Edita un articulo de la lista" << endl;
+        cout << "\t4. Sumar o Restar un producto de la lista" << endl;
+        cout << "\t5. Volver" << endl;
+        break;
+
+    case 2:
+
+        cout << "Bienvenido a Pan de Yoyo" << endl;
+        cout << "\n";
+        cout << "\t1. Agrega a vendedores" << endl;
+        cout << "\t2. Imprime la lista de vendedores" << endl;
+        cout << "\t3. Edita un vendedor de la lista" << endl;
+        cout << "\t4. Sumar o Restar un producto de la lista" << endl;
+        cout << "\t5. Volver" << endl;
+
+    default:
+        break;
+    }
     return;
 }
 
@@ -561,88 +588,189 @@ int main(int argc, char const *argv[])
 
     // datos
     int opcion = -1;
+    int intMenu = -1;
     char tecla;
 
     // Menu
-    while (opcion != 5)
+    while (intMenu != 3)
     {
         imprimirMenu();
         cout << "\nIngresa la opcion: ";
-        cin >> opcion;
+        cin >> intMenu;
+        opcion = -1;
 
-        if (opcion >= 0 & opcion <= 5)
+        switch (intMenu)
         {
-            switch (opcion)
+        case 1:
+            while (opcion != 5)
             {
-            case 1:
-                // Agregar un articulo
-                cout << "Ingresa la data del articulo: " << endl;
-                Productos->pedirDatos();
+                imprimirMenu(1);
+                cout << "\nIngresa la opcion: ";
+                cin >> opcion;
 
-                Productos->imprimir();
-
-                cout << "\nPresiona cualquier tecla para continuar...";
-
-                tecla = _getch(); // Tiene que presionar una tecla para continuar
-                break;
-
-            case 2:
-                // Lista
-                cout << "Lista de articulos" << endl;
-                Productos->imprimir();
-
-                cout << "\nPresiona cualquier tecla para continuar...";
-
-                tecla = _getch(); // Tiene que presionar una tecla para continuar
-                break;
-
-            case 3:
-                // Lista
-                cout << "Lista de articulos" << endl;
-                Productos->imprimir();
-
-                Productos->editarFuncion();
-
-                // Opciones distintas
-
-                tecla = _getch(); // Tiene que presionar una tecla para continuar
-                break;
-
-            case 4:
-                // Lista
-                cout << "Lista de articulos" << endl;
-                Productos->imprimir();
-
-                int editarNodo, opcionOperacion;
-
-                cout << "\nCual Nodo deseas modificar: ";
-                cin >> editarNodo;
-
-                cout << "\nDeseas restar o sumar?";
-                cout << "\n1. |- Sumar";
-                cout << "\n2. |- Restar";
-
-                cout << "\nIngresa el valor: ";
-                cin >> opcionOperacion;
-
-                if (opcionOperacion == 1)
+                if (opcion >= 0 & opcion <= 5)
                 {
-                    Productos->operacion(editarNodo);
-                };
+                    switch (opcion)
+                    {
+                    case 1:
+                        // Agregar un articulo
+                        cout << "Ingresa la data del articulo: " << endl;
+                        Productos->pedirDatos();
 
-                if (opcionOperacion == 2)
-                {
-                    Productos->operacion(editarNodo, false);
+                        Productos->imprimir();
+
+                        cout << "\nPresiona cualquier tecla para continuar...";
+
+                        tecla = _getch(); // Tiene que presionar una tecla para continuar
+                        break;
+
+                    case 2:
+                        // Lista
+                        cout << "Lista de articulos" << endl;
+                        Productos->imprimir();
+
+                        cout << "\nPresiona cualquier tecla para continuar...";
+
+                        tecla = _getch(); // Tiene que presionar una tecla para continuar
+                        break;
+
+                    case 3:
+                        // Lista
+                        cout << "Lista de articulos" << endl;
+                        Productos->imprimir();
+
+                        Productos->editarFuncion();
+
+                        // Opciones distintas
+
+                        tecla = _getch(); // Tiene que presionar una tecla para continuar
+                        break;
+
+                    case 4:
+                        // Lista
+                        cout << "Lista de articulos" << endl;
+                        Productos->imprimir();
+
+                        int editarNodo, opcionOperacion;
+
+                        cout << "\nCual Nodo deseas modificar: ";
+                        cin >> editarNodo;
+
+                        cout << "\nDeseas restar o sumar?";
+                        cout << "\n1. |- Sumar";
+                        cout << "\n2. |- Restar";
+
+                        cout << "\nIngresa el valor: ";
+                        cin >> opcionOperacion;
+
+                        if (opcionOperacion == 1)
+                        {
+                            Productos->operacion(editarNodo);
+                        };
+
+                        if (opcionOperacion == 2)
+                        {
+                            Productos->operacion(editarNodo, false);
+                        }
+
+                        // Opciones distintas
+
+                        tecla = _getch(); // Tiene que presionar una tecla para continuar
+                        break;
+
+                    default:
+                        break;
+                    }
                 }
-
-                // Opciones distintas
-
-                tecla = _getch(); // Tiene que presionar una tecla para continuar
-                break;
-
-            default:
-                break;
             }
+
+            break;
+
+        case 2:
+            while (opcion != 5)
+            {
+                imprimirMenu(2);
+                cout << "\nIngresa la opcion: ";
+                cin >> opcion;
+
+                if (opcion >= 0 & opcion <= 5)
+                {
+                    switch (opcion)
+                    {
+                    case 1:
+                        // Agregar un articulo
+                        cout << "Ingresa la data del articulo: " << endl;
+                        Productos->pedirDatos();
+
+                        Productos->imprimir();
+
+                        cout << "\nPresiona cualquier tecla para continuar...";
+
+                        tecla = _getch(); // Tiene que presionar una tecla para continuar
+                        break;
+
+                    case 2:
+                        // Lista
+                        cout << "Lista de articulos" << endl;
+                        Productos->imprimir();
+
+                        cout << "\nPresiona cualquier tecla para continuar...";
+
+                        tecla = _getch(); // Tiene que presionar una tecla para continuar
+                        break;
+
+                    case 3:
+                        // Lista
+                        cout << "Lista de articulos" << endl;
+                        Productos->imprimir();
+
+                        Productos->editarFuncion();
+
+                        // Opciones distintas
+
+                        tecla = _getch(); // Tiene que presionar una tecla para continuar
+                        break;
+
+                    case 4:
+                        // Lista
+                        cout << "Lista de articulos" << endl;
+                        Productos->imprimir();
+
+                        int editarNodo, opcionOperacion;
+
+                        cout << "\nCual Nodo deseas modificar: ";
+                        cin >> editarNodo;
+
+                        cout << "\nDeseas restar o sumar?";
+                        cout << "\n1. |- Sumar";
+                        cout << "\n2. |- Restar";
+
+                        cout << "\nIngresa el valor: ";
+                        cin >> opcionOperacion;
+
+                        if (opcionOperacion == 1)
+                        {
+                            Productos->operacion(editarNodo);
+                        };
+
+                        if (opcionOperacion == 2)
+                        {
+                            Productos->operacion(editarNodo, false);
+                        }
+
+                        // Opciones distintas
+
+                        tecla = _getch(); // Tiene que presionar una tecla para continuar
+                        break;
+
+                    default:
+                        break;
+                    }
+                }
+            }
+
+        default:
+            break;
         }
     }
 
