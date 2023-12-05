@@ -600,18 +600,18 @@ public:
     { // no se va a tomar caso lista vacia, se supone que se imprime con algo
 
         nodov *actual = this->cabeza;
-        cout << "Articulos de la lista : " << endl;
+        cout << "Vendedores de la lista : " << endl;
         while (actual != NULL)
         {
 
-            cout << "Cedula: " << this->cabeza->vendedor.cedula;
-            cout << " nombre: " << this->cabeza->vendedor.nombre->nombre << this->cabeza->vendedor.nombre->apellido;
-            cout << " Fecha de ingreso:" << this->cabeza->vendedor.Fecha_ingreso->dia << '/';
-            cout << this->cabeza->vendedor.Fecha_ingreso->mes << '/' << this->cabeza->vendedor.Fecha_ingreso->mes << endl;
-            cout << " Score de ventas: " << this->cabeza->vendedor.score << endl;
+            cout << "Cedula: " << actual->vendedor.cedula;
+            cout << " nombre: " << actual->vendedor.nombre->nombre << ' ' << actual->vendedor.nombre->apellido;
+            cout << " Fecha de ingreso:" << actual->vendedor.Fecha_ingreso->dia << '/';
+            cout << actual->vendedor.Fecha_ingreso->mes << '/' << actual->vendedor.Fecha_ingreso->ano << endl;
+            cout << " Score de ventas: " << actual->vendedor.score << endl;
             actual = actual->prox;
         }
-    };
+        };
 
     Lvendedor(string dir) // Llena la lista a partir del archivo .txt
     {                     /// 8 lineas de txt por vendedor
@@ -626,95 +626,39 @@ public:
         archivo.open(direccion, std::ios::in);
         if (archivo.is_open())
         {
-            cout << "EL ARCHIVO ABRIO";
-            while ((getline(archivo, linea)) && (linea == "")) // primera linea buscada
+            while ((getline(archivo, linea))) // primera linea buscada
             {
-                validateStr(linea) ? cedula = stol(linea) : cedula = 0;
+
+                validateInt(linea) ? cedula = stol(linea) : cedula = 0;
                 getline(archivo, linea);
+
                 validateStr(linea) ? nombre->nombre = linea : nombre->nombre = "";
                 getline(archivo, linea);
+
                 validateStr(linea) ? nombre->apellido = linea : nombre->apellido = "";
                 getline(archivo, linea);
+
                 validateInt(linea) ? F_ingreso->dia = stoi(linea) : F_ingreso->dia = 0;
                 getline(archivo, linea);
+
                 validateInt(linea) ? F_ingreso->mes = stoi(linea) : F_ingreso->mes = 0;
                 getline(archivo, linea);
+
                 validateInt(linea) ? F_ingreso->ano = stoi(linea) : F_ingreso->ano = 0;
                 getline(archivo, linea);
+
                 validateInt(linea) ? p_comision = stoi(linea) : p_comision = comision_default;
                 getline(archivo, linea);
-                validateInt(linea) ? score = stoi(linea) : score = 0;
 
-                /*                 try
-                                {
-                                    cedula = stof(linea);
-                                    cout << cedula;
-                                }
-                                catch (const std::invalid_argument &e)
-                                {
-                                    cout << "ERROR EN CEDULA";
-                                    for (int i = 1; i <= 7; i++)
-                                        getline(archivo, linea);
-                                    continue;
-                                }
-                                getline(archivo, linea);
-                                nombre->nombre = linea;
-                                getline(archivo, linea);
-                                nombre->apellido = linea;
-                                try
-                                {
-                                    F_ingreso->dia = stof(linea);
-                                    cout << F_ingreso->dia;
-                                }
-                                catch (const std::invalid_argument &e)
-                                {
-                                    for (int i = 1; i <= 4; i++)
-                                        getline(archivo, linea);
-                                    continue;
-                                }
-                                try
-                                {
-                                    F_ingreso->mes = stof(linea);
-                                    cout << F_ingreso->mes;
-                                }
-                                catch (const std::invalid_argument &e)
-                                {
-                                    for (int i = 1; i <= 3; i++)
-                                        getline(archivo, linea);
-                                    continue;
-                                }
-                                try
-                                {
-                                    F_ingreso->ano = stof(linea);
-                                }
-                                catch (const std::invalid_argument &e)
-                                {
-                                    for (int i = 1; i <= 2; i++)
-                                        getline(archivo, linea);
-                                    continue;
-                                }
-                                try
-                                {
-                                    p_comision = stof(linea);
-                                }
-                                catch (const std::invalid_argument &e)
-                                {
-                                    getline(archivo, linea);
-                                    continue;
-                                }
-                                try
-                                {
-                                    score = stof(linea);
-                                }
-                                catch (const std::invalid_argument &e)
-                                {
-                                    continue;
-                                }
-                 */
+                validateInt(linea) ? score = stoi(linea) : score = 0;
+                cout << cedula << ' ' << p_comision << endl;
+                _getch();
                 this->agregar(cedula, nombre, F_ingreso, p_comision, score);
-                this->imprimir();
+                nombre = new NyA;
+                F_ingreso = new Fecha;
             }
         };
+        archivo.close();
     };
 };
 
@@ -780,6 +724,7 @@ int main(int argc, char const *argv[])
     Larticulo *Productos = new Larticulo(directorio["productos"]);
     Lvendedor *Vendedores = new Lvendedor(directorio["vendedores"]);
     Vendedores->imprimir();
+
     int u;
     cin >> u;
 
