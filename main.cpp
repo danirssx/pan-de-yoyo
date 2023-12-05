@@ -398,7 +398,7 @@ public:
     //
     /// Constructor, va a leer el ,txt y va a llenar la lista
     string direccion = "";
-    Larticulo(string dir)
+    Larticulo(string dir) // Llena la lista a partir del archivo .txt
     {
         direccion = dir;
         fstream archivo;
@@ -412,21 +412,29 @@ public:
         {
             while (getline(archivo, linea)) // primera linea buscada
             {
-                id = linea;
+                id = linea; /// Falta verificar que tenga un codigo valido IMPORTANTEEEE
                 getline(archivo, linea);
                 nombre = linea;
                 getline(archivo, linea);
 
                 try // control de errores
                 {
-                    precio = stof(linea); // cast de libreria string
+                    precio = stof(linea);
+                } // cast de libreria string
+                catch (const std::invalid_argument &e)
+                {
+                    getline(archivo, linea);
+                    continue;
+                }
+
+                try
+                {
                     getline(archivo, linea);
                     cantidad = stoi(linea);
                 }
                 catch (const std::invalid_argument &e)
                 {
-                    precio = 0.0; ////okosokoodkfokeok
-                    cantidad = 0;
+                    continue;
                 }
 
                 this->agregar(id, nombre, precio, cantidad);
@@ -434,29 +442,8 @@ public:
         };
     };
 
-    /*     void refrescar()
-        { // actualiza toda la base de datos.txt(productos.txt)
-            nodoa *actual = this->cabeza;
-            fstream archivo;
-            archivo.open(direccion, std::ios::out | std::ios::trunc);
-            if (!archivo.is_open())
-                std::cout << "Error al abrir el archivo\n";
-            else
-            {
-                while (actual != NULL)
-                {
-                    archivo << actual->articulo.id << "\n";
-                    archivo << actual->articulo.nombre << "\n";
-                    archivo << actual->articulo.precio << "\n";
-                    archivo << actual->articulo.cantidad << "\n";
-                    actual = actual->prox;
-                }
-                archivo.close();
-            }
-        }; */
-
-    void refrescar()
-    { // actualiza toda la base de datos.txt(productos.txt)
+    void refrescar() /// COPIA TODO LO QUE ESTA EN LA LISTA EN SU BASE DE DATOS CORRESPONDIENTE
+    {                // actualiza toda la base de datos.txt(productos.txt)
         nodoa *actual = this->cabeza;
         fstream archivo;
         archivo.open(direccion, std::ios::out | std::ios::trunc);
@@ -478,9 +465,8 @@ public:
 
     // LIBERACION MEMORIA
     //
-    //
-    // Desturctor para liberar la memoria
-    ~Larticulo()
+
+    ~Larticulo() // Destructor para liberar la memoria
     {
         nodoa *actual = this->cabeza;
         while (actual != NULL)
