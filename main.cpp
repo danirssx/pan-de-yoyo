@@ -97,42 +97,14 @@ public:
 
         input.clear();
         cout << "\nIngresa el precio del producto: ";
-        // while (!validateFloat(input))
-        // {
-        //     getline(cin, input);
 
-        //     if (validateFloat(input))
-        //     {
-        //         precio = stof(input);
-        //         break;
-        //     }
-        //     else
-        //     {
-        //         cout << "Ingresa un numero valido";
-        //         cout << "\n\n Vuelve a intentarlo: ";
-        //     }
-        // };
         funcFloat(precio);
 
         system("cls");
 
         input.clear();
         cout << "\nIngresa la cantidad de elementos: ";
-        // while (!validateInt(input))
-        // {
-        //     getline(cin, input);
 
-        //     if (validateInt(input))
-        //     {
-        //         cantidad = stoi(input);
-        //         break;
-        //     }
-        //     else
-        //     {
-        //         cout << "Ingresa un numero valido!";
-        //         cout << "\n\n Vuelve a intentarlo: ";
-        //     };
-        // }
         funcInt(cantidad);
 
         // Es momento de agregar los datos del producto:
