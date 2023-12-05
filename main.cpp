@@ -131,6 +131,7 @@ public:
             }
             actual->prox = new nodoa(id, nombre, precio, cantidad);
         }
+        this->refrescar();
     };
 
     // EDICION
@@ -429,8 +430,10 @@ public:
     //
     //
     /// Constructor, va a leer el ,txt y va a llenar la lista
-    Larticulo(string direccion)
+    string direccion = "";
+    Larticulo(string dir) // Llena la lista a partir del archivo .txt
     {
+        direccion = dir;
         fstream archivo;
         string linea;
         string id;
@@ -442,23 +445,60 @@ public:
         {
             while (getline(archivo, linea)) // primera linea buscada
             {
-                id = linea;
+                id = linea; /// Falta verificar que tenga un codigo valido IMPORTANTEEEE
                 getline(archivo, linea);
                 nombre = linea;
                 getline(archivo, linea);
-                precio = stof(linea); // cast de libreria string
-                getline(archivo, linea);
-                cantidad = stoi(linea);
+
+                try // control de errores
+                {
+                    precio = stof(linea);
+                } // cast de libreria string
+                catch (const std::invalid_argument &e)
+                {
+                    getline(archivo, linea);
+                    continue;
+                }
+
+                try
+                {
+                    getline(archivo, linea);
+                    cantidad = stoi(linea);
+                }
+                catch (const std::invalid_argument &e)
+                {
+                    continue;
+                }
                 this->agregar(id, nombre, precio, cantidad);
             }
         };
     };
 
+    void refrescar() /// COPIA TODO LO QUE ESTA EN LA LISTA EN SU BASE DE DATOS CORRESPONDIENTE
+    {                // actualiza toda la base de datos.txt(productos.txt)
+        nodoa *actual = this->cabeza;
+        fstream archivo;
+        archivo.open(direccion, std::ios::out | std::ios::trunc);
+        if (!archivo.is_open())
+            std::cout << "Error al abrir el archivo\n";
+        else
+        {
+            while (actual != NULL)
+            {
+                archivo << actual->articulo.id << "\n";
+                archivo << actual->articulo.nombre << "\n";
+                archivo << actual->articulo.precio << "\n";
+                archivo << actual->articulo.cantidad << "\n";
+                actual = actual->prox;
+            }
+            archivo.close();
+        }
+    };
+
     // LIBERACION MEMORIA
     //
-    //
-    // Desturctor para liberar la memoria
-    ~Larticulo()
+
+    ~Larticulo() // Destructor para liberar la memoria
     {
 
         nodoa *actual = this->cabeza;
@@ -476,7 +516,7 @@ public:
 // Estructura de los vendedores:
 // VENDEDORES
 //
-// ///////////////////////////////////////
+// int dia, mes, ano;///////////////
 struct Fecha
 {
     short int dia, mes, ano;
@@ -486,7 +526,12 @@ struct NyA // Nombre y Apellido
 {
     string nombre, apellido;
 };
-
+/*
+long int cedula = 0;
+NyA *nombre = NULL;
+Fecha *Fecha_ingreso;
+int p_comision;
+int score = 0; */
 class Vendedor // objeto que va en la posicion de DATA del nodo
 {
 
@@ -494,11 +539,11 @@ public:
     long int cedula = 0;
     NyA *nombre = NULL;
     Fecha *Fecha_ingreso;
-    short int p_comision;
+    int p_comision;
     int score = 0;
     // falta por agregar receta;
     // METODO
-    void llenar(long int cedula, NyA *nombre, Fecha *fecha, short int p_comision, int score)
+    void llenar(long int cedula, NyA *nombre, Fecha *fecha, int p_comision, int score)
     {
         this->cedula = cedula;
         this->nombre = nombre;
@@ -515,7 +560,7 @@ public:
     nodov *prox = NULL;
     // builder
 
-    nodov(long int cedula, NyA *nombre, Fecha *fecha, short int p_comision, int score)
+    nodov(long int cedula, NyA *nombre, Fecha *fecha, int p_comision, int score)
     {
         this->vendedor.llenar(cedula, nombre, fecha, p_comision, score);
     };
@@ -526,8 +571,10 @@ class Lvendedor
 
 public:
     nodov *cabeza = NULL;
+    string direccion;
+    int comision_default = 10;
     // metodo
-    void agregar(long int cedula, NyA *nombre, Fecha *fecha, short int p_comision, int score)
+    void agregar(long int cedula, NyA *nombre, Fecha *fecha, int p_comision, int score)
     {
 
         if (this->cabeza == NULL)
@@ -546,17 +593,65 @@ public:
     { // no se va a tomar caso lista vacia, se supone que se imprime con algo
 
         nodov *actual = this->cabeza;
-        cout << "Articulos de la lista : " << endl;
+        cout << "Vendedores de la lista : " << endl;
         while (actual != NULL)
         {
 
-            cout << "Cedula: " << this->cabeza->vendedor.cedula;
-            cout << " nombre: " << this->cabeza->vendedor.nombre->nombre << this->cabeza->vendedor.nombre->apellido;
-            cout << " Fecha de ingreso:" << this->cabeza->vendedor.Fecha_ingreso->dia << '/';
-            cout << this->cabeza->vendedor.Fecha_ingreso->mes << '/' << this->cabeza->vendedor.Fecha_ingreso->mes << endl;
-            cout << " Score de ventas: " << this->cabeza->vendedor.score << endl;
+            cout << "Cedula: " << actual->vendedor.cedula;
+            cout << " nombre: " << actual->vendedor.nombre->nombre << ' ' << actual->vendedor.nombre->apellido;
+            cout << " Fecha de ingreso:" << actual->vendedor.Fecha_ingreso->dia << '/';
+            cout << actual->vendedor.Fecha_ingreso->mes << '/' << actual->vendedor.Fecha_ingreso->ano << endl;
+            cout << " Score de ventas: " << actual->vendedor.score << endl;
             actual = actual->prox;
         }
+    };
+
+    Lvendedor(string dir) // Llena la lista a partir del archivo .txt
+    {                     /// 8 lineas de txt por vendedor
+        direccion = dir;
+        fstream archivo;
+        string linea;
+        long int cedula;
+        NyA *nombre = new NyA;
+        Fecha *F_ingreso = new Fecha;
+        int p_comision;
+        int score;
+        archivo.open(direccion, std::ios::in);
+        if (archivo.is_open())
+        {
+            while ((getline(archivo, linea))) // primera linea buscada
+            {
+
+                validateInt(linea) ? cedula = stol(linea) : cedula = 0;
+                getline(archivo, linea);
+
+                validateStr(linea) ? nombre->nombre = linea : nombre->nombre = "";
+                getline(archivo, linea);
+
+                validateStr(linea) ? nombre->apellido = linea : nombre->apellido = "";
+                getline(archivo, linea);
+
+                validateInt(linea) ? F_ingreso->dia = stoi(linea) : F_ingreso->dia = 0;
+                getline(archivo, linea);
+
+                validateInt(linea) ? F_ingreso->mes = stoi(linea) : F_ingreso->mes = 0;
+                getline(archivo, linea);
+
+                validateInt(linea) ? F_ingreso->ano = stoi(linea) : F_ingreso->ano = 0;
+                getline(archivo, linea);
+
+                validateInt(linea) ? p_comision = stoi(linea) : p_comision = comision_default;
+                getline(archivo, linea);
+
+                validateInt(linea) ? score = stoi(linea) : score = 0;
+                cout << cedula << ' ' << p_comision << endl;
+                _getch();
+                this->agregar(cedula, nombre, F_ingreso, p_comision, score);
+                nombre = new NyA;
+                F_ingreso = new Fecha;
+            }
+        };
+        archivo.close();
     };
 };
 
@@ -1096,7 +1191,11 @@ int main(int argc, char const *argv[])
     cargar_direcciones("base_datos\\directorio.txt");
     // Declaracion
     Larticulo *Productos = new Larticulo(directorio["productos"]);
-    Lclientes *Clientes = new Lclientes(directorio["clientes"]);
+    Lvendedor *Vendedores = new Lvendedor(directorio["vendedores"]);
+    Vendedores->imprimir();
+
+    int u;
+    cin >> u;
 
     // cout << Productos;
     // cout << C
