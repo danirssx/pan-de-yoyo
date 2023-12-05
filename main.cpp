@@ -77,7 +77,7 @@ public:
         string input, id, nombre;
         bool temporal;
         float precio;
-        long int cantidad;
+        int cantidad;
 
         system("cls");
 
@@ -1107,7 +1107,7 @@ int main(int argc, char const *argv[])
     char tecla;
 
     // Menu
-    while (intMenu != 3)
+    while (intMenu != 4)
     {
         imprimirMenu();
         cout << "\nIngresa la opcion: ";
@@ -1361,5 +1361,6 @@ int main(int argc, char const *argv[])
     }
 
     delete Productos;
+    delete Clientes;
     return 0;
 }
