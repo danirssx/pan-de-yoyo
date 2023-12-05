@@ -579,6 +579,7 @@ class Lvendedor
 public:
     nodov *cabeza = NULL;
     string direccion;
+    int comision_default = 10;
     // metodo
     void agregar(long int cedula, NyA *nombre, Fecha *fecha, int p_comision, int score)
     {
@@ -628,6 +629,21 @@ public:
             cout << "EL ARCHIVO ABRIO";
             while ((getline(archivo, linea)) && (linea == "")) // primera linea buscada
             {
+                validateStr(linea) ? cedula = stol(linea) : cedula = 0;
+                getline(archivo, linea);
+                validateStr(linea) ? nombre->nombre = linea : nombre->nombre = "";
+                getline(archivo, linea);
+                validateStr(linea) ? nombre->apellido = linea : nombre->apellido = "";
+                getline(archivo, linea);
+                validateInt(linea) ? F_ingreso->dia = stoi(linea) : F_ingreso->dia = 0;
+                getline(archivo, linea);
+                validateInt(linea) ? F_ingreso->mes = stoi(linea) : F_ingreso->mes = 0;
+                getline(archivo, linea);
+                validateInt(linea) ? F_ingreso->ano = stoi(linea) : F_ingreso->ano = 0;
+                getline(archivo, linea);
+                validateInt(linea) ? p_comision = stoi(linea) : p_comision = comision_default;
+                getline(archivo, linea);
+                validateInt(linea) ? score = stoi(linea) : score = 0;
 
                 /*                 try
                                 {
