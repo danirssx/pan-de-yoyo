@@ -30,7 +30,7 @@ bool validateStr(const std::string &input)
 };
 
 // VALIDACIONES BOOLEANAS
-bool boolStr(const std::string &input, bool id)
+bool esunid(const std::string &input, bool id)
 {
     bool value;
 

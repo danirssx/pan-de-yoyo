@@ -15,7 +15,7 @@ bool validateFloat(const std::string &input);
 bool validateStr(const std::string &input);
 
 // Boolean functions
-bool boolStr(const std::string &input, bool id = false);
+bool esunid(const std::string &input, bool id = true);
 
 // Functions
 std::string validateStrInput(std::string &strValor, bool id = false);
