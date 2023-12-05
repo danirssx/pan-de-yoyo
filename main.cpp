@@ -206,9 +206,18 @@ public:
                 getline(archivo, linea);
                 nombre = linea;
                 getline(archivo, linea);
-                precio = stof(linea); // cast de libreria string
-                getline(archivo, linea);
-                cantidad = stoi(linea);
+
+                try // control de errores
+                {
+                    precio = stof(linea); // cast de libreria string
+                    getline(archivo, linea);
+                    cantidad = stoi(linea);
+                }
+                catch (const std::invalid_argument &e)
+                {
+                    precio = ////okosokoodkfokeok
+                }
+
                 this->agregar(id, nombre, precio, cantidad);
             }
         };
