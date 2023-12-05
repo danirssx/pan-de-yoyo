@@ -72,87 +72,69 @@ public:
     {
         string input, id, nombre;
         float precio;
-        long int cantidad;
+        int cantidad;
 
         system("cls");
 
         // Validation made it
+        // ID VALIDATION
         cin.ignore();
         cout << "\nIngresa el ID, formato(A0000): ";
-        while (!validateID(input))
-        {
-            getline(cin, input);
-            if (validateID(input))
-            {
-                id = input;
-                break;
-            }
-            else
-            {
-                cout << "Ingresa un ID valido! \n";
-                cout << "\nVuelve a intentarlo: ";
-            }
-        }
+
+        validateStrInput(id, true);
 
         system("cls");
 
+        // INPUT VALIDATIONS
+        //
         input.clear();
         cout << "\nIngresa el nombre del articulo: ";
-        while (!validateStr(input))
-        {
-            getline(cin, input);
 
-            if (validateStr(input))
-            {
-                nombre = input;
-                break;
-            }
-            else
-            {
-                cout << "No se admiten caracteres especiales";
-                cout << "\n\nVuelve a intentarlo: ";
-            };
-        }
+        validateStrInput(nombre);
 
+        // Precio validation
         system("cls");
 
         input.clear();
         cout << "\nIngresa el precio del producto: ";
-        while (!validateFloat(input))
-        {
-            getline(cin, input);
+        // while (!validateFloat(input))
+        // {
+        //     getline(cin, input);
 
-            if (validateFloat(input))
-            {
-                precio = stof(input);
-                break;
-            }
-            else
-            {
-                cout << "Ingresa un numero valido";
-                cout << "\n\n Vuelve a intentarlo: ";
-            }
-        };
+        //     if (validateFloat(input))
+        //     {
+        //         precio = stof(input);
+        //         break;
+        //     }
+        //     else
+        //     {
+        //         cout << "Ingresa un numero valido";
+        //         cout << "\n\n Vuelve a intentarlo: ";
+        //     }
+        // };
+        funcFloat(precio);
 
         system("cls");
 
         input.clear();
         cout << "\nIngresa la cantidad de elementos: ";
-        while (!validateInt(input))
-        {
-            getline(cin, input);
+        // while (!validateInt(input))
+        // {
+        //     getline(cin, input);
 
-            if (validateInt(input))
-            {
-                cantidad = stoi(input);
-                break;
-            }
-            else
-            {
-                cout << "Ingresa un numero valido!";
-                cout << "\n\n Vuelve a intentarlo: ";
-            };
-        }
+        //     if (validateInt(input))
+        //     {
+        //         cantidad = stoi(input);
+        //         break;
+        //     }
+        //     else
+        //     {
+        //         cout << "Ingresa un numero valido!";
+        //         cout << "\n\n Vuelve a intentarlo: ";
+        //     };
+        // }
+        funcInt(cantidad);
+
         // Es momento de agregar los datos del producto:
         agregar(id, nombre, precio, cantidad);
     };
@@ -185,7 +167,7 @@ public:
             int numNodo = 0;
             int intBuscar, intValor, opcion, editarValor;
             float floatBuscar, floatValor;
-            string strBuscar, strValor;
+            string input, strBuscar, strValor;
 
             // Menu funcionalidades
             cout << "\nCual modalidad de busqueda deseas aplicar?";
@@ -251,7 +233,22 @@ public:
                 {
                 //  El ID
                 case 1:
-                    cin >> strValor;
+                    // Validation made it
+                    cin.ignore();
+                    while (!validateID(input))
+                    {
+                        getline(cin, input);
+                        if (validateID(input))
+                        {
+                            strValor = input;
+                            break;
+                        }
+                        else
+                        {
+                            cout << "Ingresa un ID valido! \n";
+                            cout << "\nVuelve a intentarlo: ";
+                        }
+                    };
                     editarDato(strValor, editarValor, numNodo);
                     break;
 
