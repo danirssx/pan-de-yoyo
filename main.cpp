@@ -71,6 +71,7 @@ public:
     void pedirDatos()
     {
         string input, id, nombre;
+        bool temporal;
         float precio;
         int cantidad;
 

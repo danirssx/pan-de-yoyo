@@ -29,6 +29,26 @@ bool validateStr(const std::string &input)
     return std::regex_match(input, noSpecialCharsRegex);
 };
 
+// VALIDACIONES BOOLEANAS
+bool esunid(const std::string &input, bool id)
+{
+    bool value;
+
+    if (id ? std::regex_match(input, idRegex) : std::regex_match(input, noSpecialCharsRegex))
+    {
+        value = true;
+    }
+    else
+    {
+        value = false;
+    }
+
+    return value;
+};
+
+// BUCLES
+//
+//
 // Functions to make the validation
 std::string validateStrInput(std::string &strValor, bool id)
 {
