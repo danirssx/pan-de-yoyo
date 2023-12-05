@@ -591,6 +591,7 @@ public:
     };
     void imprimir()
     { // no se va a tomar caso lista vacia, se supone que se imprime con algo
+        system("cls");
 
         nodov *actual = this->cabeza;
         cout << "Vendedores de la lista : " << endl;
@@ -644,8 +645,6 @@ public:
                 getline(archivo, linea);
 
                 validateInt(linea) ? score = stoi(linea) : score = 0;
-                cout << cedula << ' ' << p_comision << endl;
-                _getch();
                 this->agregar(cedula, nombre, F_ingreso, p_comision, score);
                 nombre = new NyA;
                 F_ingreso = new Fecha;
@@ -1088,7 +1087,9 @@ public:
         fstream archivo;
         string linea;
         string nombre, apellido, direccion_cliente;
-        long int cedula, telefono;
+        long int cedula;
+        long long telefono;
+
         archivo.open(direccion, std::ios::in);
         if (archivo.is_open())
         {
@@ -1192,13 +1193,7 @@ int main(int argc, char const *argv[])
     // Declaracion
     Larticulo *Productos = new Larticulo(directorio["productos"]);
     Lvendedor *Vendedores = new Lvendedor(directorio["vendedores"]);
-    Vendedores->imprimir();
-
-    int u;
-    cin >> u;
-
-    // cout << Productos;
-    // cout << C
+    Lclientes *Clientes = new Lclientes(directorio["clientes"]);
 
     // datos
     int opcion = -1;
@@ -1313,10 +1308,10 @@ int main(int argc, char const *argv[])
                     {
                     case 1:
                         // Agregar un articulo
-                        cout << "Ingresa la data del articulo: " << endl;
-                        Productos->pedirDatos();
+                        cout << "Ingresa la data de vendedores: " << endl;
+                        // Vendedores->pedirDatos();
 
-                        Productos->imprimir();
+                        Vendedores->imprimir();
 
                         cout << "\nPresiona cualquier tecla para continuar...";
 
@@ -1325,8 +1320,8 @@ int main(int argc, char const *argv[])
 
                     case 2:
                         // Lista
-                        cout << "Lista de articulos" << endl;
-                        Productos->imprimir();
+                        cout << "Lista de vendedores" << endl;
+                        Vendedores->imprimir();
 
                         cout << "\nPresiona cualquier tecla para continuar...";
 
@@ -1335,10 +1330,10 @@ int main(int argc, char const *argv[])
 
                     case 3:
                         // Lista
-                        cout << "Lista de articulos" << endl;
-                        Productos->imprimir();
+                        cout << "Lista de vendedores" << endl;
+                        Vendedores->imprimir();
 
-                        Productos->editarFuncion();
+                        // Productos->editarFuncion();
 
                         // Opciones distintas
 
@@ -1347,30 +1342,30 @@ int main(int argc, char const *argv[])
 
                     case 4:
                         // Lista
-                        cout << "Lista de articulos" << endl;
-                        Productos->imprimir();
+                        cout << "Lista de vendedores" << endl;
+                        Vendedores->imprimir();
 
-                        int editarNodo, opcionOperacion;
+                        // int editarNodo, opcionOperacion;
 
-                        cout << "\nCual Nodo deseas modificar: ";
-                        cin >> editarNodo;
+                        // cout << "\nCual Nodo deseas modificar: ";
+                        // cin >> editarNodo;
 
-                        cout << "\nDeseas restar o sumar?";
-                        cout << "\n1. |- Sumar";
-                        cout << "\n2. |- Restar";
+                        // cout << "\nDeseas restar o sumar?";
+                        // cout << "\n1. |- Sumar";
+                        // cout << "\n2. |- Restar";
 
-                        cout << "\nIngresa el valor: ";
-                        cin >> opcionOperacion;
+                        // cout << "\nIngresa el valor: ";
+                        // cin >> opcionOperacion;
 
-                        if (opcionOperacion == 1)
-                        {
-                            Productos->operacion(editarNodo);
-                        };
+                        // if (opcionOperacion == 1)
+                        // {
+                        //     Productos->operacion(editarNodo);
+                        // };
 
-                        if (opcionOperacion == 2)
-                        {
-                            Productos->operacion(editarNodo, false);
-                        }
+                        // if (opcionOperacion == 2)
+                        // {
+                        //     Productos->operacion(editarNodo, false);
+                        // }
 
                         // Opciones distintas
 
