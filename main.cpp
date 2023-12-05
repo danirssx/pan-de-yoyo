@@ -70,7 +70,7 @@ public:
     // Llenado del usuario
     void pedirDatos()
     {
-        string id, nombre;
+        string input, id, nombre;
         float precio;
         long int cantidad;
 
@@ -78,12 +78,13 @@ public:
 
         // Validation made it
         cin.ignore();
-        cout << "Ingresa el ID, formato(A0000): ";
-        while (!validateID(id))
+        cout << "\nIngresa el ID, formato(A0000): ";
+        while (!validateID(input))
         {
-            getline(cin, id);
-            if (validateID(id))
+            getline(cin, input);
+            if (validateID(input))
             {
+                id = input;
                 break;
             }
             else
@@ -93,15 +94,65 @@ public:
             }
         }
 
-        cout << "Ingresa el Nombre: ";
-        getline(cin, nombre);
+        system("cls");
 
-        cout << "Ingresa el precio: ";
-        cin >> precio;
+        input.clear();
+        cout << "\nIngresa el nombre del articulo: ";
+        while (!validateStr(input))
+        {
+            getline(cin, input);
 
-        cout << "Ingresa la cantidad de elementos: ";
-        cin >> cantidad;
+            if (validateStr(input))
+            {
+                nombre = input;
+                break;
+            }
+            else
+            {
+                cout << "No se admiten caracteres especiales";
+                cout << "\n\nVuelve a intentarlo: ";
+            };
+        }
 
+        system("cls");
+
+        input.clear();
+        cout << "\nIngresa el precio del producto: ";
+        while (!validateFloat(input))
+        {
+            getline(cin, input);
+
+            if (validateFloat(input))
+            {
+                precio = stof(input);
+                break;
+            }
+            else
+            {
+                cout << "Ingresa un numero valido";
+                cout << "\n\n Vuelve a intentarlo: ";
+            }
+        };
+
+        system("cls");
+
+        input.clear();
+        cout << "\nIngresa la cantidad de elementos: ";
+        while (!validateInt(input))
+        {
+            getline(cin, input);
+
+            if (validateInt(input))
+            {
+                cantidad = stoi(input);
+                break;
+            }
+            else
+            {
+                cout << "Ingresa un numero valido!";
+                cout << "\n\n Vuelve a intentarlo: ";
+            };
+        }
         // Es momento de agregar los datos del producto:
         agregar(id, nombre, precio, cantidad);
     };
