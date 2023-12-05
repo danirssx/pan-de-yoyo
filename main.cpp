@@ -5,6 +5,9 @@
 // Para manejar el uso de los key arrows
 #include <conio.h>
 
+// Include other files
+#include "regex/regex_utils.h"
+
 using namespace std;
 // MANEJO DE DIRECCIONES DE LA BASE DE DATOS
 
@@ -73,9 +76,22 @@ public:
 
         system("cls");
 
-        cout << "Ingresa el ID: ";
+        // Validation made it
         cin.ignore();
-        getline(cin, id);
+        cout << "Ingresa el ID, formato(A0000): ";
+        while (!validateID(id))
+        {
+            getline(cin, id);
+            if (validateID(id))
+            {
+                break;
+            }
+            else
+            {
+                cout << "Ingresa un ID valido! \n";
+                cout << "\nVuelve a intentarlo: ";
+            }
+        }
 
         cout << "Ingresa el Nombre: ";
         getline(cin, nombre);

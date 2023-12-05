@@ -1,1 +1,2 @@
-intBuscar
+
+        system("cls");
