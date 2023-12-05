@@ -1,9 +1,13 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <map> //NUEVA LIBRERIA
+#include <map>   //NUEVA LIBRERIA
+#include <regex> // Para validar
 // Para manejar el uso de los key arrows
 #include <conio.h>
+
+// Include other files
+#include "regex/regex_utils.h"
 
 using namespace std;
 // MANEJO DE DIRECCIONES DE LA BASE DE DATOS
@@ -533,9 +537,339 @@ T inputValor()
     return cin >> valor;
 };
 
+// * ESTRUCTURA CLIENTES
+
+class Cliente // Objeto que tiene cada nodo de cliente
+{
+
+public:
+    long int cedula = 0;
+    long int telefono = 0;
+    string nombre, apellido, direccion;
+
+    void llenar(string nombre, string apellido, long int cedula, long int telefono, string direccion)
+    {
+        this->nombre = nombre;
+        this->apellido = apellido;
+        this->cedula = cedula;
+        this->telefono = telefono;
+        this->direccion = direccion;
+    };
+};
+
+class nodoc
+{
+public:
+    Cliente cliente;
+    nodoc *prox = NULL;
+
+    // builder
+    nodoc(string nombre, string apellido, long int cedula, long int telefono, string direccion)
+    {
+        this->cliente.llenar(nombre, apellido, cedula, telefono, direccion);
+    };
+};
+
+class Lclientes
+{
+public:
+    nodoc *cabeza = NULL;
+
+    void pedirDatos()
+    {
+        long int cedula, telefono;
+        string nombre, apellido, direccion;
+
+        system("cls"); // Limpiar terminal
+
+        cout << "Ingrese la cedula del cliente: ";
+        cin >> cedula;
+
+        cout << "Ingrese el nombre del cliente: ";
+        cin >> nombre;
+
+        cout << "Ingrese el apellido del cliente: ";
+        cin >> apellido;
+
+        cout << "Ingrese la direccion del cliente: ";
+        cin >> direccion;
+
+        cout << "Ingrese el telefono del cliente: ";
+        cin >> telefono;
+    };
+
+    void agregar(string nombre, string apellido, long int cedula, long int telefono, string direccion)
+    {
+
+        nodoc *nuevo_nodo = new nodoc(nombre, apellido, cedula, telefono, direccion);
+        // Chequear si la lista está vacía
+        if (this->cabeza == NULL)
+        {
+            this->cabeza = nuevo_nodo;
+        }
+        else
+        {
+            nodoc *actual = this->cabeza;
+
+            while (actual->prox != NULL)
+            {
+
+                actual = actual->prox;
+            }
+
+            actual->prox = nuevo_nodo;
+        }
+    };
+    // Eliminar por id (cedula)
+    void eliminar(long int cedula)
+    {
+
+        // Chequear si la lista está vacía
+        if (this->cabeza == NULL)
+        {
+            return;
+        }
+        else
+        {
+            nodoc *actual = this->cabeza;
+            nodoc *anterior = NULL;
+
+            while (actual != NULL)
+            {
+                if (actual->cliente.cedula == cedula)
+                {
+                    if (anterior == NULL)
+                    {
+                        // Si el nodo a eliminar es la cabeza de la lista
+                        this->cabeza = actual->prox;
+                    }
+                    else
+                    {
+                        anterior->prox = actual->prox;
+                    }
+                    delete actual;
+                    return;
+                }
+                anterior = actual;
+                actual = actual->prox;
+            }
+        }
+    };
+
+    // Buscar cliente (Retorna el nodo del cliente) por ej si hay más de un cliente con el mismo nombre o apellido devuelve el primero
+    template <typename T>
+    nodoc *buscarCliente(T valor)
+    {
+        nodoc *actual = this->cabeza;
+
+        while (actual != NULL)
+        {
+            // Chequear si el valor es igual a la cedula o al telefono o al nombre/apellido
+            if constexpr (is_same<T, long int>::value)
+            {
+                if (actual->cliente.cedula == valor || actual->cliente.telefono == valor)
+                {
+                    return actual;
+                }
+            }
+            else if constexpr (is_same<T, string>::value)
+            {
+                if (actual->cliente.nombre == valor || actual->cliente.apellido == valor)
+                {
+                    return actual;
+                }
+            }
+
+            actual = actual->prox;
+        }
+
+        // In case no client is found
+        return NULL;
+    }
+
+    void editarCliente(long int cedula)
+    {
+        long int cedulaBuscar, longValor;
+        string strValor;
+        int opcion;
+
+        // Menu funcionalidades
+        cout << "\nIngrese la cedula del cliente que desea modificar: ";
+        cin >> cedulaBuscar;
+
+        nodoc *clienteNodo = buscarCliente(cedulaBuscar);
+
+        if (clienteNodo != NULL)
+        {
+            cout << "\nQue desea modificar? " << endl;
+            cout << "1 |- El nombre" << endl;
+            cout << "2 |- El apellido" << endl;
+            cout << "3 |- La cedula" << endl;
+            cout << "4 |- La direccion" << endl;
+            cout << "5 |- El telefono" << endl;
+            cout << "\n";
+            cin >> opcion;
+
+            switch (opcion)
+            {
+            case 1: // Nombre
+                cout << "\nIngrese el nuevo nombre: ";
+                cin >> strValor;
+                editarDato(strValor, opcion, cedulaBuscar);
+                break;
+            case 2: // Apellido
+                cout << "\nIngrese el nuevo apellido: ";
+                cin >> strValor;
+                editarDato(strValor, opcion, cedulaBuscar);
+                break;
+            case 3: // Cedula
+                cout << "\nIngrese la nueva cedula: ";
+                cin >> longValor;
+                editarDato(longValor, opcion, cedulaBuscar);
+                break;
+            case 4: // Direccion
+                cout << "\nIngrese la nueva direccion: ";
+                cin >> strValor;
+                editarDato(strValor, opcion, cedulaBuscar);
+                break;
+            case 5: // Telefono
+                cout << "\nIngrese el nuevo telefono: ";
+                cin >> longValor;
+                editarDato(longValor, opcion, cedulaBuscar);
+                break;
+            default:
+                cout << "Opcion no valida!!" << endl;
+                break;
+            }
+        }
+        else
+        {
+            cout << "Cliente no encontrado!!" << endl;
+        }
+    }
+
+    // * Helpers
+
+    template <typename T>
+    void editarDato(T valor, int opcion, long int cedula)
+    {
+        // Encontrar al cliente
+        nodoc *clienteNodo = buscarCliente(cedula);
+
+        if (clienteNodo != NULL)
+        {
+
+            switch (opcion)
+            {
+            case 1: // Nombre
+
+                if constexpr (is_same<T, string>::value)
+                {
+                    clienteNodo->cliente.nombre = valor;
+                }
+                break;
+            case 2: // Apellido
+                if constexpr (is_same<T, string>::value)
+                {
+                    clienteNodo->cliente.apellido = valor;
+                }
+                break;
+            case 3: // Cedula
+                if constexpr (is_same<T, long int>::value)
+                {
+                    clienteNodo->cliente.cedula = valor;
+                }
+
+                break;
+            case 4: // Direccion
+                if constexpr (is_same<T, string>::value)
+                {
+                    clienteNodo->cliente.direccion = valor;
+                }
+
+                break;
+            case 5: // Telefono
+                if constexpr (is_same<T, long int>::value)
+                {
+                    clienteNodo->cliente.telefono = valor;
+                }
+                break;
+            default:
+                cout << "Opcion no valida!!" << endl;
+                break;
+            }
+        }
+        else
+        {
+            cout << "Cliente no encontrado!!" << endl;
+        }
+    }
+
+    void imprimir()
+    {
+        system("cls");
+
+        nodoc *actual = this->cabeza;
+        cout << "\nClientes : " << endl;
+        cout << "\n";
+
+        while (actual != NULL)
+        {
+            cout << "Nombre: " << actual->cliente.nombre << " ";
+            cout << "Apellido: " << actual->cliente.apellido << " ";
+            cout << "Cedula: " << actual->cliente.cedula << " ";
+            cout << "Telefono: " << actual->cliente.telefono << " ";
+            cout << "Direccion: " << actual->cliente.direccion << " ";
+
+            actual = actual->prox;
+        }
+    }
+
+    // * CONSTRUCTOR (lee el .txt y llena la lista)
+    Lclientes(string direccion)
+    {
+        fstream archivo;
+        string linea;
+        string nombre, apellido, direccion;
+        long int cedula, telefono;
+        archivo.open(direccion, std::ios::in);
+        if (archivo.is_open())
+        {
+            while (getline(archivo, linea))
+            {
+                nombre = linea;
+                getline(archivo, linea);
+                apellido = linea;
+                getline(archivo, linea);
+                cedula = stol(linea);
+                getline(archivo, linea);
+                telefono = stol(linea);
+                getline(archivo, linea);
+                direccion = linea;
+                this->agregar(nombre, apellido, cedula, telefono, direccion);
+            }
+        }
+    }
+
+    // * Liberacion de memoria (Destructor)
+    ~Lclientes()
+    {
+        nodoc *actual = this->cabeza;
+        while (actual != NULL)
+        {
+            nodoc *temp = actual;
+            actual = actual->prox;
+            delete temp;
+        }
+
+        this->cabeza = NULL; // Establecer cabeza como NULL
+    }
+};
+
 // MENU
 //
 ////////////////
+
 void imprimirMenu()
 {
     system("cls"); // Limpia la consola
