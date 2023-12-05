@@ -539,15 +539,20 @@ T inputValor()
 
 // * ESTRUCTURA CLIENTES
 
+bool esNumero(const string &str)
+{
+    return all_of(str.begin(), str.end(), ::isdigit);
+}
+
 class Cliente // Objeto que tiene cada nodo de cliente
 {
 
 public:
     long int cedula = 0;
-    long int telefono = 0;
+    long long telefono = 0;
     string nombre, apellido, direccion;
 
-    void llenar(string nombre, string apellido, long int cedula, long int telefono, string direccion)
+    void llenar(string nombre, string apellido, long int cedula, long long telefono, string direccion)
     {
         this->nombre = nombre;
         this->apellido = apellido;
@@ -564,7 +569,7 @@ public:
     nodoc *prox = NULL;
 
     // builder
-    nodoc(string nombre, string apellido, long int cedula, long int telefono, string direccion)
+    nodoc(string nombre, string apellido, long int cedula, long long telefono, string direccion)
     {
         this->cliente.llenar(nombre, apellido, cedula, telefono, direccion);
     };
@@ -577,28 +582,63 @@ public:
 
     void pedirDatos()
     {
-        long int cedula, telefono;
-        string nombre, apellido, direccion;
+        long int cedula;
+        long long telefono;
+        string nombre, apellido, direccion, cedula_str, telefono_str;
 
         system("cls"); // Limpiar terminal
 
-        cout << "Ingrese la cedula del cliente: ";
-        cin >> cedula;
+        // Pedir la cédula y validar
+        cout << "Ingrese la cedula del cliente (entre 7 y 8 digitos): ";
+        cin >> cedula_str;
+
+        while (!esNumero(cedula_str) || cedula_str.length() < 7 || cedula_str.length() > 8)
+        {
+            cout << "Cedula invalida. Ingrese nuevamente (entre 7 y 8 digitos): ";
+            cin >> cedula_str;
+        }
+
+        cedula = stol(cedula_str); // Convertir la cadena a long int
 
         cout << "Ingrese el nombre del cliente: ";
-        cin >> nombre;
+        cin.ignore();
+        getline(cin, nombre);
 
         cout << "Ingrese el apellido del cliente: ";
-        cin >> apellido;
+        cin.ignore();
+        getline(cin, apellido);
 
         cout << "Ingrese la direccion del cliente: ";
-        cin >> direccion;
+        cin.ignore();
+        getline(cin, direccion);
 
         cout << "Ingrese el telefono del cliente: ";
-        cin >> telefono;
+        cin >> telefono_str;
+
+        // Validar que el teléfono tenga exactamente 11 digitos
+        while (telefono_str.length() != 11)
+        {
+            cout << "Debe tener exactamente 11 digitos. Ingrese nuevamente: ";
+            cin >> telefono_str;
+        }
+
+        // Validar que todos los caracteres sean dígitos
+        for (char c : telefono_str)
+        {
+            if (!isdigit(c))
+            {
+                cout << "Numero de telefono invalido. Ingreselo nuevamente: ";
+                cin >> telefono_str;
+                break;
+            }
+        }
+
+        telefono = stoll(telefono_str); // Convertir la cadena a long long
+
+        agregar(nombre, apellido, cedula, telefono, direccion);
     };
 
-    void agregar(string nombre, string apellido, long int cedula, long int telefono, string direccion)
+    void agregar(string nombre, string apellido, long int cedula, long long telefono, string direccion)
     {
 
         nodoc *nuevo_nodo = new nodoc(nombre, apellido, cedula, telefono, direccion);
@@ -621,11 +661,15 @@ public:
         }
     };
     // Eliminar por id (cedula)
-    void eliminar(long int cedula)
+    void eliminar()
     {
 
+        long int cedula;
+        cout << "Ingrese la cedula del cliente que quiere eliminar: ";
+        cin >> cedula;
+
         // Chequear si la lista está vacía
-        if (this->cabeza == NULL)
+        if (this->cabeza == NULL || !cedula)
         {
             return;
         }
@@ -647,7 +691,9 @@ public:
                     {
                         anterior->prox = actual->prox;
                     }
-                    delete actual;
+                    cout << "Cliente eliminado!";
+                    nodoc *temp = actual;
+                    delete temp;
                     return;
                 }
                 anterior = actual;
@@ -674,7 +720,10 @@ public:
             }
             else if constexpr (is_same<T, string>::value)
             {
-                if (actual->cliente.nombre == valor || actual->cliente.apellido == valor)
+                string nombreCliente = toUpper(actual->cliente.nombre);
+                string apellidoCliente = toUpper(actual->cliente.apellido);
+
+                if (nombreCliente == valor || apellidoCliente == valor)
                 {
                     return actual;
                 }
@@ -687,8 +736,78 @@ public:
         return NULL;
     }
 
-    void editarCliente(long int cedula)
+    void buscarClienteMenu()
     {
+        int opcion;
+        long int cedulaBuscar;
+        long long telefonoBuscar;
+        string nombreBuscar;
+
+        cout << "\nIngrese la opcin de busqueda: " << endl;
+        cout << "1 |- Buscar por cedula" << endl;
+        cout << "2 |- Buscar por nombre" << endl;
+        cout << "3 |- Buscar por telefono" << endl;
+        cin >> opcion;
+
+        switch (opcion)
+        {
+        case 1:
+        { // Buscar por cédula
+            cout << "\nIngrese la cedula del cliente: ";
+            cin >> cedulaBuscar;
+            nodoc *clienteNodoCedula = buscarCliente(cedulaBuscar);
+            if (clienteNodoCedula != NULL)
+            {
+                cout << "Cliente encontrado: " << clienteNodoCedula->cliente.nombre << endl;
+            }
+            else
+            {
+                cout << "Cliente no encontrado" << endl;
+            }
+            break;
+        }
+        case 2:
+        { // Buscar por nombre
+            cout << "\nIngrese el nombre del cliente: ";
+            cin >> nombreBuscar;
+
+            nombreBuscar = toUpper(nombreBuscar);
+            nodoc *clienteNodoNombre = buscarCliente(nombreBuscar);
+            if (clienteNodoNombre != NULL)
+            {
+                cout << "Cliente encontrado: " << clienteNodoNombre->cliente.nombre << endl;
+            }
+            else
+            {
+                cout << "Cliente no encontrado" << endl;
+            }
+            break;
+        }
+        case 3:
+        { // Buscar por telefono
+            cout << "\nIngrese el telefono del cliente: ";
+            cin >> telefonoBuscar;
+
+            nodoc *clienteNodoTelefono = buscarCliente(telefonoBuscar);
+            if (clienteNodoTelefono != NULL)
+            {
+                cout << "Cliente encontrado: " << clienteNodoTelefono->cliente.nombre << endl;
+            }
+            else
+            {
+                cout << "Cliente no encontrado" << endl;
+            }
+            break;
+        }
+        default:
+            cout << "Opción no valida" << endl;
+            break;
+        }
+    }
+
+    void editarCliente()
+    {
+
         long int cedulaBuscar, longValor;
         string strValor;
         int opcion;
@@ -749,6 +868,16 @@ public:
     }
 
     // * Helpers
+
+    string toUpper(const string &s)
+    {
+        string upperStr = s;
+        for (char &c : upperStr)
+        {
+            c = toupper(c);
+        }
+        return upperStr;
+    }
 
     template <typename T>
     void editarDato(T valor, int opcion, long int cedula)
@@ -819,7 +948,9 @@ public:
             cout << "Apellido: " << actual->cliente.apellido << " ";
             cout << "Cedula: " << actual->cliente.cedula << " ";
             cout << "Telefono: " << actual->cliente.telefono << " ";
-            cout << "Direccion: " << actual->cliente.direccion << " ";
+            cout << "Direccion: " << actual->cliente.direccion << endl;
+
+            cout << endl;
 
             actual = actual->prox;
         }
@@ -830,7 +961,7 @@ public:
     {
         fstream archivo;
         string linea;
-        string nombre, apellido, direccion;
+        string nombre, apellido, direccion_cliente;
         long int cedula, telefono;
         archivo.open(direccion, std::ios::in);
         if (archivo.is_open())
@@ -843,10 +974,10 @@ public:
                 getline(archivo, linea);
                 cedula = stol(linea);
                 getline(archivo, linea);
-                telefono = stol(linea);
+                telefono = stoll(linea);
                 getline(archivo, linea);
-                direccion = linea;
-                this->agregar(nombre, apellido, cedula, telefono, direccion);
+                direccion_cliente = linea;
+                this->agregar(nombre, apellido, cedula, telefono, direccion_cliente);
             }
         }
     }
@@ -870,115 +1001,334 @@ public:
 //
 ////////////////
 
-void imprimirMenu()
+void imprimirMenu(int opcion = 0)
 {
     system("cls"); // Limpia la consola
 
-    cout << "Bienvenido a Pan de Yoyo" << endl;
-    cout << "\n";
-    cout << "\t1. Agrega un articulo" << endl;
-    cout << "\t2. Imprime la lista de articulos" << endl;
-    cout << "\t3. Edita un articulo de la lista" << endl;
-    cout << "\t4. Sumar o Restar un producto de la lista" << endl;
-    cout << "\t5. Salir" << endl;
+    switch (opcion)
+    {
+    case 0:
+        cout << "Bienvenido a Pan de Yoyo" << endl;
+        cout << "\n";
+        cout << "\t1. Articulos" << endl;
+        cout << "\t2. Vendedores" << endl;
+        cout << "\t3. Clientes" << endl;
+        cout << "\t4. Salir" << endl;
+        break;
+
+    case 1:
+
+        cout << "Bienvenido a Pan de Yoyo" << endl;
+        cout << "\n";
+        cout << "\t1. Agrega un articulo" << endl;
+        cout << "\t2. Imprime la lista de articulos" << endl;
+        cout << "\t3. Edita un articulo de la lista" << endl;
+        cout << "\t4. Sumar o Restar un producto de la lista" << endl;
+        cout << "\t5. Volver" << endl;
+        break;
+
+    case 2:
+
+        cout << "Bienvenido a Pan de Yoyo" << endl;
+        cout << "\n";
+        cout << "\t1. Agrega a vendedores" << endl;
+        cout << "\t2. Imprime la lista de vendedores" << endl;
+        cout << "\t3. Edita un vendedor de la lista" << endl;
+        cout << "\t4. Sumar o Restar un producto de la lista" << endl;
+        cout << "\t5. Volver" << endl;
+        break;
+
+    case 3:
+
+        cout << "Bienvenido a Pan de Yoyo" << endl;
+        cout << "\n";
+        cout << "\t1. Agrega un cliente" << endl;
+        cout << "\t2. Imprime la lista de clientes" << endl;
+        cout << "\t3. Edita un cliente de la lista" << endl;
+        cout << "\t4. Buscar un cliente en la base de datos" << endl;
+        cout << "\t5. Eliminar un cliente de la base de datos" << endl;
+        cout << "\t6. Volver" << endl;
+        break;
+
+    default:
+        break;
+    }
     return;
 }
 
 // MAIN
 //
 // ///////////////////
+
 int main(int argc, char const *argv[])
 { // guarda las direcciones en diccionario
     cargar_direcciones("base_datos\\directorio.txt");
     // Declaracion
     Larticulo *Productos = new Larticulo(directorio["productos"]);
+    Lclientes *Clientes = new Lclientes(directorio["clientes"]);
+
+    // cout << Productos;
+    // cout << C
 
     // datos
     int opcion = -1;
+    int intMenu = -1;
     char tecla;
 
     // Menu
-    while (opcion != 5)
+    while (intMenu != 3)
     {
         imprimirMenu();
         cout << "\nIngresa la opcion: ";
-        cin >> opcion;
+        cin >> intMenu;
+        opcion = -1;
 
-        if (opcion >= 0 & opcion <= 5)
+        switch (intMenu)
         {
-            switch (opcion)
+        case 1:
+            while (opcion != 5)
             {
-            case 1:
-                // Agregar un articulo
-                cout << "Ingresa la data del articulo: " << endl;
-                Productos->pedirDatos();
+                imprimirMenu(1);
+                cout << "\nIngresa la opcion: ";
+                cin >> opcion;
 
-                Productos->imprimir();
-
-                cout << "\nPresiona cualquier tecla para continuar...";
-
-                tecla = _getch(); // Tiene que presionar una tecla para continuar
-                break;
-
-            case 2:
-                // Lista
-                cout << "Lista de articulos" << endl;
-                Productos->imprimir();
-
-                cout << "\nPresiona cualquier tecla para continuar...";
-
-                tecla = _getch(); // Tiene que presionar una tecla para continuar
-                break;
-
-            case 3:
-                // Lista
-                cout << "Lista de articulos" << endl;
-                Productos->imprimir();
-
-                Productos->editarFuncion();
-
-                // Opciones distintas
-
-                tecla = _getch(); // Tiene que presionar una tecla para continuar
-                break;
-
-            case 4:
-                // Lista
-                cout << "Lista de articulos" << endl;
-                Productos->imprimir();
-
-                int editarNodo, opcionOperacion;
-
-                cout << "\nCual Nodo deseas modificar: ";
-                cin >> editarNodo;
-
-                cout << "\nDeseas restar o sumar?";
-                cout << "\n1. |- Sumar";
-                cout << "\n2. |- Restar";
-
-                cout << "\nIngresa el valor: ";
-                cin >> opcionOperacion;
-
-                if (opcionOperacion == 1)
+                if (opcion >= 0 & opcion <= 5)
                 {
-                    Productos->operacion(editarNodo);
-                };
+                    switch (opcion)
+                    {
+                    case 1:
+                        // Agregar un articulo
+                        cout << "Ingresa la data del articulo: " << endl;
+                        Productos->pedirDatos();
 
-                if (opcionOperacion == 2)
-                {
-                    Productos->operacion(editarNodo, false);
+                        Productos->imprimir();
+
+                        cout << "\nPresiona cualquier tecla para continuar...";
+
+                        tecla = _getch(); // Tiene que presionar una tecla para continuar
+                        break;
+
+                    case 2:
+                        // Lista
+                        cout << "Lista de articulos" << endl;
+                        Productos->imprimir();
+
+                        cout << "\nPresiona cualquier tecla para continuar...";
+
+                        tecla = _getch(); // Tiene que presionar una tecla para continuar
+                        break;
+
+                    case 3:
+                        // Lista
+                        cout << "Lista de articulos" << endl;
+                        Productos->imprimir();
+
+                        Productos->editarFuncion();
+
+                        // Opciones distintas
+
+                        tecla = _getch(); // Tiene que presionar una tecla para continuar
+                        break;
+
+                    case 4:
+                        // Lista
+                        cout << "Lista de articulos" << endl;
+                        Productos->imprimir();
+
+                        int editarNodo, opcionOperacion;
+
+                        cout << "\nCual Nodo deseas modificar: ";
+                        cin >> editarNodo;
+
+                        cout << "\nDeseas restar o sumar?";
+                        cout << "\n1. |- Sumar";
+                        cout << "\n2. |- Restar";
+
+                        cout << "\nIngresa el valor: ";
+                        cin >> opcionOperacion;
+
+                        if (opcionOperacion == 1)
+                        {
+                            Productos->operacion(editarNodo);
+                        };
+
+                        if (opcionOperacion == 2)
+                        {
+                            Productos->operacion(editarNodo, false);
+                        }
+
+                        // Opciones distintas
+
+                        tecla = _getch(); // Tiene que presionar una tecla para continuar
+                        break;
+
+                    default:
+                        break;
+                    }
                 }
-
-                // Opciones distintas
-
-                tecla = _getch(); // Tiene que presionar una tecla para continuar
-                break;
-
-            default:
-                break;
             }
+
+            break;
+
+        case 2:
+            while (opcion != 5)
+            {
+                imprimirMenu(2);
+                cout << "\nIngresa la opcion: ";
+                cin >> opcion;
+
+                if (opcion >= 0 & opcion <= 5)
+                {
+                    switch (opcion)
+                    {
+                    case 1:
+                        // Agregar un articulo
+                        cout << "Ingresa la data del articulo: " << endl;
+                        Productos->pedirDatos();
+
+                        Productos->imprimir();
+
+                        cout << "\nPresiona cualquier tecla para continuar...";
+
+                        tecla = _getch(); // Tiene que presionar una tecla para continuar
+                        break;
+
+                    case 2:
+                        // Lista
+                        cout << "Lista de articulos" << endl;
+                        Productos->imprimir();
+
+                        cout << "\nPresiona cualquier tecla para continuar...";
+
+                        tecla = _getch(); // Tiene que presionar una tecla para continuar
+                        break;
+
+                    case 3:
+                        // Lista
+                        cout << "Lista de articulos" << endl;
+                        Productos->imprimir();
+
+                        Productos->editarFuncion();
+
+                        // Opciones distintas
+
+                        tecla = _getch(); // Tiene que presionar una tecla para continuar
+                        break;
+
+                    case 4:
+                        // Lista
+                        cout << "Lista de articulos" << endl;
+                        Productos->imprimir();
+
+                        int editarNodo, opcionOperacion;
+
+                        cout << "\nCual Nodo deseas modificar: ";
+                        cin >> editarNodo;
+
+                        cout << "\nDeseas restar o sumar?";
+                        cout << "\n1. |- Sumar";
+                        cout << "\n2. |- Restar";
+
+                        cout << "\nIngresa el valor: ";
+                        cin >> opcionOperacion;
+
+                        if (opcionOperacion == 1)
+                        {
+                            Productos->operacion(editarNodo);
+                        };
+
+                        if (opcionOperacion == 2)
+                        {
+                            Productos->operacion(editarNodo, false);
+                        }
+
+                        // Opciones distintas
+
+                        tecla = _getch(); // Tiene que presionar una tecla para continuar
+                        break;
+
+                    default:
+                        break;
+                    }
+                }
+            }
+            break;
+        case 3:
+            while (opcion != 6)
+            {
+                imprimirMenu(3);
+                cout << "\nIngresa la opcion: ";
+                cin >> opcion;
+
+                if (opcion >= 0 & opcion <= 5)
+                {
+                    switch (opcion)
+                    {
+                    case 1:
+
+                        // Agregar un cliente
+                        cout << "Ingresa la data del cliente: " << endl;
+                        Clientes->pedirDatos();
+
+                        Clientes->imprimir();
+
+                        cout << "\nPresiona cualquier tecla para continuar...";
+
+                        tecla = _getch(); // Tiene que presionar una tecla para continuar
+                        break;
+
+                    case 2:
+                        // Lista
+                        cout << "Lista de clientes" << endl;
+                        Clientes->imprimir();
+
+                        cout << "\nPresiona cualquier tecla para continuar...";
+
+                        tecla = _getch(); // Tiene que presionar una tecla para continuar
+                        break;
+
+                    case 3:
+                        // Lista
+                        cout << "Editar cliente :)" << endl;
+                        Clientes->imprimir();
+
+                        Clientes->editarCliente();
+
+                        // Opciones distintas
+
+                        tecla = _getch(); // Tiene que presionar una tecla para continuar
+                        break;
+
+                    case 4:
+
+                        system("cls");
+                        // Lista
+                        Clientes->buscarClienteMenu();
+                        // Opciones distintas
+
+                        tecla = _getch(); // Tiene que presionar una tecla para continuar
+                        break;
+                    case 5:
+
+                        system("cls");
+                        // Lista
+                        Clientes->eliminar();
+                        // Opciones distintas
+
+                        tecla = _getch(); // Tiene que presionar una tecla para continuar
+                        break;
+
+                    default:
+                        break;
+                    }
+                }
+            }
+
+        default:
+            break;
         }
     }
 
+    delete Productos;
     return 0;
 }
