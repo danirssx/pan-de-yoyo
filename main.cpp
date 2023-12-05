@@ -162,7 +162,7 @@ public:
             case 2:
                 cout << "\nIngresa el ID a buscar: ";
                 cin.ignore();
-                getline(cin, strBuscar);
+                validateStrInput(strBuscar, true);
                 buscarDato(strBuscar, opcion, numNodo);
                 break;
             case 3:
@@ -208,20 +208,21 @@ public:
                 case 1:
                     // Validation made it
                     cin.ignore();
-                    while (!validateID(input))
-                    {
-                        getline(cin, input);
-                        if (validateID(input))
-                        {
-                            strValor = input;
-                            break;
-                        }
-                        else
-                        {
-                            cout << "Ingresa un ID valido! \n";
-                            cout << "\nVuelve a intentarlo: ";
-                        }
-                    };
+                    // while (!validateID(input))
+                    // {
+                    //     getline(cin, input);
+                    //     if (validateID(input))
+                    //     {
+                    //         strValor = input;
+                    //         break;
+                    //     }
+                    //     else
+                    //     {
+                    //         cout << "Ingresa un ID valido! \n";
+                    //         cout << "\nVuelve a intentarlo: ";
+                    //     }
+                    // };
+                    validateStrInput(strValor, true);
                     editarDato(strValor, editarValor, numNodo);
                     break;
 
