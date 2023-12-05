@@ -436,7 +436,6 @@ public:
                 {
                     continue;
                 }
-
                 this->agregar(id, nombre, precio, cantidad);
             }
         };
@@ -482,7 +481,7 @@ public:
 // Estructura de los vendedores:
 // VENDEDORES
 //
-// ///////////////////////////////////////
+// int dia, mes, ano;///////////////
 struct Fecha
 {
     short int dia, mes, ano;
@@ -492,7 +491,12 @@ struct NyA // Nombre y Apellido
 {
     string nombre, apellido;
 };
-
+/*
+long int cedula = 0;
+NyA *nombre = NULL;
+Fecha *Fecha_ingreso;
+int p_comision;
+int score = 0; */
 class Vendedor // objeto que va en la posicion de DATA del nodo
 {
 
@@ -500,11 +504,11 @@ public:
     long int cedula = 0;
     NyA *nombre = NULL;
     Fecha *Fecha_ingreso;
-    short int p_comision;
+    int p_comision;
     int score = 0;
     // falta por agregar receta;
     // METODO
-    void llenar(long int cedula, NyA *nombre, Fecha *fecha, short int p_comision, int score)
+    void llenar(long int cedula, NyA *nombre, Fecha *fecha, int p_comision, int score)
     {
         this->cedula = cedula;
         this->nombre = nombre;
@@ -521,7 +525,7 @@ public:
     nodov *prox = NULL;
     // builder
 
-    nodov(long int cedula, NyA *nombre, Fecha *fecha, short int p_comision, int score)
+    nodov(long int cedula, NyA *nombre, Fecha *fecha, int p_comision, int score)
     {
         this->vendedor.llenar(cedula, nombre, fecha, p_comision, score);
     };
@@ -532,8 +536,9 @@ class Lvendedor
 
 public:
     nodov *cabeza = NULL;
+    string direccion;
     // metodo
-    void agregar(long int cedula, NyA *nombre, Fecha *fecha, short int p_comision, int score)
+    void agregar(long int cedula, NyA *nombre, Fecha *fecha, int p_comision, int score)
     {
 
         if (this->cabeza == NULL)
@@ -563,6 +568,89 @@ public:
             cout << " Score de ventas: " << this->cabeza->vendedor.score << endl;
             actual = actual->prox;
         }
+    };
+
+    Lvendedor(string dir) // Llena la lista a partir del archivo .txt
+    {                     /// 8 lineas de txt por vendedor
+        direccion = dir;
+        fstream archivo;
+        string linea;
+        long int cedula;
+        NyA *nombre = new NyA;
+        Fecha *F_ingreso = new Fecha;
+        int p_comision;
+        int score;
+        archivo.open(direccion, std::ios::in);
+        if (archivo.is_open())
+        {
+            while (getline(archivo, linea)) // primera linea buscada
+            {
+                try
+                {
+                    cedula = stof(linea);
+                }
+                catch (const std::invalid_argument &e)
+                {
+                    cout << "ERROR EN CEDULA";
+                    for (int i = 1; i <= 7; i++)
+                        getline(archivo, linea);
+                    continue;
+                }
+                getline(archivo, linea);
+                nombre->nombre = linea;
+                getline(archivo, linea);
+                nombre->apellido = linea;
+                try
+                {
+                    F_ingreso->dia = stof(linea);
+                }
+                catch (const std::invalid_argument &e)
+                {
+                    for (int i = 1; i <= 4; i++)
+                        getline(archivo, linea);
+                    continue;
+                }
+                try
+                {
+                    F_ingreso->mes = stof(linea);
+                }
+                catch (const std::invalid_argument &e)
+                {
+                    for (int i = 1; i <= 3; i++)
+                        getline(archivo, linea);
+                    continue;
+                }
+                try
+                {
+                    F_ingreso->ano = stof(linea);
+                }
+                catch (const std::invalid_argument &e)
+                {
+                    for (int i = 1; i <= 2; i++)
+                        getline(archivo, linea);
+                    continue;
+                }
+                try
+                {
+                    p_comision = stof(linea);
+                }
+                catch (const std::invalid_argument &e)
+                {
+                    getline(archivo, linea);
+                    continue;
+                }
+                try
+                {
+                    score = stof(linea);
+                }
+                catch (const std::invalid_argument &e)
+                {
+                    continue;
+                }
+
+                this->agregar(cedula, nombre, F_ingreso, p_comision, score);
+            }
+        };
     };
 };
 
@@ -626,6 +714,10 @@ int main(int argc, char const *argv[])
     cargar_direcciones("base_datos\\directorio.txt");
     // Declaracion
     Larticulo *Productos = new Larticulo(directorio["productos"]);
+    Lvendedor *Vendedores = new Lvendedor(directorio["vendedores"]);
+    Vendedores->imprimir();
+    int u;
+    cin >> u;
 
     // datos
     int opcion = -1;

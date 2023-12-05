@@ -1,5 +1,24 @@
+A0001
+Donas de arequipe
+1.2
+20
 A0002 
 Churros maniacos
 5.3
 5
-
+A0003
+Donas con Chocolate
+4.2
+66
+A0004
+Tartaleta de Manzana
+6
+45
+A0005
+Quesillo
+3
+12
+A0006
+Galletas de Avena
+2
+124
