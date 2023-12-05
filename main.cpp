@@ -74,10 +74,11 @@ public:
         system("cls");
 
         cout << "Ingresa el ID: ";
-        cin >> id;
+        cin.ignore();
+        getline(cin, id);
 
         cout << "Ingresa el Nombre: ";
-        cin >> nombre;
+        getline(cin, nombre);
 
         cout << "Ingresa el precio: ";
         cin >> precio;
@@ -138,12 +139,14 @@ public:
                 break;
             case 2:
                 cout << "\nIngresa el ID a buscar: ";
-                cin >> strBuscar;
+                cin.ignore();
+                getline(cin, strBuscar);
                 buscarDato(strBuscar, opcion, numNodo);
                 break;
             case 3:
                 cout << "\nIngresa el nombre a buscar: ";
-                cin >> strBuscar;
+                cin.ignore();
+                getline(cin, strBuscar);
                 buscarDato(strBuscar, opcion, numNodo);
                 break;
             case 4:
@@ -427,6 +430,7 @@ public:
     // Desturctor para liberar la memoria
     ~Larticulo()
     {
+
         nodoa *actual = this->cabeza;
         while (actual != NULL)
         {
@@ -434,6 +438,7 @@ public:
             actual = actual->prox;
             delete temp;
         }
+
         this->cabeza = NULL; // Establecer cabeza como NULL
     }
 };
@@ -585,6 +590,8 @@ int main(int argc, char const *argv[])
     cargar_direcciones("base_datos\\directorio.txt");
     // Declaracion
     Larticulo *Productos = new Larticulo(directorio["productos"]);
+
+    cout << Productos;
 
     // datos
     int opcion = -1;
@@ -774,5 +781,6 @@ int main(int argc, char const *argv[])
         }
     }
 
+    delete Productos;
     return 0;
 }
