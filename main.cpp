@@ -215,7 +215,8 @@ public:
                 }
                 catch (const std::invalid_argument &e)
                 {
-                    precio = ////okosokoodkfokeok
+                    precio = 0.0; ////okosokoodkfokeok
+                    cantidad = 0;
                 }
 
                 this->agregar(id, nombre, precio, cantidad);
