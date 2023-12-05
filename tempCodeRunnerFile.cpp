@@ -1,1 +1,1 @@
-intBuscar
+r
