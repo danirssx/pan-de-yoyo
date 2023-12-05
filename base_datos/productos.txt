@@ -1,32 +1,8 @@
 A0001
-Donas con Chocolate
-4.2
-66
-A0002
-Tartaleta de Manzana
-6
-45
-A0003
-Quesillo
-3
-12
-A0004
-Galletas de Avena
-2
-124
-A0001
-Donas con Chocolate
-4.2
-66
-A0002
-Tartaleta de Manzana
-6
-45
-A0003
-Quesillo
-3
-12
-A0004
-Galletas de Avena
-2
-124
+Donas de arequipe
+1.2
+20
+A0002 
+Churros maniacos
+5.3
+5
