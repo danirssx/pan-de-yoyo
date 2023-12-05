@@ -624,72 +624,78 @@ public:
         archivo.open(direccion, std::ios::in);
         if (archivo.is_open())
         {
-            while (getline(archivo, linea)) // primera linea buscada
+            cout << "EL ARCHIVO ABRIO";
+            while ((getline(archivo, linea)) && (linea == "")) // primera linea buscada
             {
-                try
-                {
-                    cedula = stof(linea);
-                }
-                catch (const std::invalid_argument &e)
-                {
-                    cout << "ERROR EN CEDULA";
-                    for (int i = 1; i <= 7; i++)
-                        getline(archivo, linea);
-                    continue;
-                }
-                getline(archivo, linea);
-                nombre->nombre = linea;
-                getline(archivo, linea);
-                nombre->apellido = linea;
-                try
-                {
-                    F_ingreso->dia = stof(linea);
-                }
-                catch (const std::invalid_argument &e)
-                {
-                    for (int i = 1; i <= 4; i++)
-                        getline(archivo, linea);
-                    continue;
-                }
-                try
-                {
-                    F_ingreso->mes = stof(linea);
-                }
-                catch (const std::invalid_argument &e)
-                {
-                    for (int i = 1; i <= 3; i++)
-                        getline(archivo, linea);
-                    continue;
-                }
-                try
-                {
-                    F_ingreso->ano = stof(linea);
-                }
-                catch (const std::invalid_argument &e)
-                {
-                    for (int i = 1; i <= 2; i++)
-                        getline(archivo, linea);
-                    continue;
-                }
-                try
-                {
-                    p_comision = stof(linea);
-                }
-                catch (const std::invalid_argument &e)
-                {
-                    getline(archivo, linea);
-                    continue;
-                }
-                try
-                {
-                    score = stof(linea);
-                }
-                catch (const std::invalid_argument &e)
-                {
-                    continue;
-                }
 
+                /*                 try
+                                {
+                                    cedula = stof(linea);
+                                    cout << cedula;
+                                }
+                                catch (const std::invalid_argument &e)
+                                {
+                                    cout << "ERROR EN CEDULA";
+                                    for (int i = 1; i <= 7; i++)
+                                        getline(archivo, linea);
+                                    continue;
+                                }
+                                getline(archivo, linea);
+                                nombre->nombre = linea;
+                                getline(archivo, linea);
+                                nombre->apellido = linea;
+                                try
+                                {
+                                    F_ingreso->dia = stof(linea);
+                                    cout << F_ingreso->dia;
+                                }
+                                catch (const std::invalid_argument &e)
+                                {
+                                    for (int i = 1; i <= 4; i++)
+                                        getline(archivo, linea);
+                                    continue;
+                                }
+                                try
+                                {
+                                    F_ingreso->mes = stof(linea);
+                                    cout << F_ingreso->mes;
+                                }
+                                catch (const std::invalid_argument &e)
+                                {
+                                    for (int i = 1; i <= 3; i++)
+                                        getline(archivo, linea);
+                                    continue;
+                                }
+                                try
+                                {
+                                    F_ingreso->ano = stof(linea);
+                                }
+                                catch (const std::invalid_argument &e)
+                                {
+                                    for (int i = 1; i <= 2; i++)
+                                        getline(archivo, linea);
+                                    continue;
+                                }
+                                try
+                                {
+                                    p_comision = stof(linea);
+                                }
+                                catch (const std::invalid_argument &e)
+                                {
+                                    getline(archivo, linea);
+                                    continue;
+                                }
+                                try
+                                {
+                                    score = stof(linea);
+                                }
+                                catch (const std::invalid_argument &e)
+                                {
+                                    continue;
+                                }
+                 */
                 this->agregar(cedula, nombre, F_ingreso, p_comision, score);
+                this->imprimir();
             }
         };
     };
