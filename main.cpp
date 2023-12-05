@@ -611,7 +611,7 @@ public:
             cout << " Score de ventas: " << actual->vendedor.score << endl;
             actual = actual->prox;
         }
-        };
+    };
 
     Lvendedor(string dir) // Llena la lista a partir del archivo .txt
     {                     /// 8 lineas de txt por vendedor
