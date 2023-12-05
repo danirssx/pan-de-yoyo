@@ -5,6 +5,9 @@
 // Para manejar el uso de los key arrows
 #include <conio.h>
 
+// Include other files
+#include "regex/regex_utils.h"
+
 using namespace std;
 // MANEJO DE DIRECCIONES DE LA BASE DE DATOS
 
@@ -67,23 +70,42 @@ public:
     // Llenado del usuario
     void pedirDatos()
     {
-        string id, nombre;
+        string input, id, nombre;
         float precio;
-        long int cantidad;
+        int cantidad;
 
         system("cls");
 
-        cout << "Ingresa el ID: ";
-        cin >> id;
+        // Validation made it
+        // ID VALIDATION
+        cin.ignore();
+        cout << "\nIngresa el ID, formato(A0000): ";
 
-        cout << "Ingresa el Nombre: ";
-        cin >> nombre;
+        validateStrInput(id, true);
 
-        cout << "Ingresa el precio: ";
-        cin >> precio;
+        system("cls");
 
-        cout << "Ingresa la cantidad de elementos: ";
-        cin >> cantidad;
+        // INPUT VALIDATIONS
+        //
+        input.clear();
+        cout << "\nIngresa el nombre del articulo: ";
+
+        validateStrInput(nombre);
+
+        // Precio validation
+        system("cls");
+
+        input.clear();
+        cout << "\nIngresa el precio del producto: ";
+
+        funcFloat(precio);
+
+        system("cls");
+
+        input.clear();
+        cout << "\nIngresa la cantidad de elementos: ";
+
+        funcInt(cantidad);
 
         // Es momento de agregar los datos del producto:
         agregar(id, nombre, precio, cantidad);
@@ -118,7 +140,7 @@ public:
             int numNodo = 0;
             int intBuscar, intValor, opcion, editarValor;
             float floatBuscar, floatValor;
-            string strBuscar, strValor;
+            string input, strBuscar, strValor;
 
             // Menu funcionalidades
             cout << "\nCual modalidad de busqueda deseas aplicar?";
@@ -139,12 +161,14 @@ public:
                 break;
             case 2:
                 cout << "\nIngresa el ID a buscar: ";
-                cin >> strBuscar;
+                cin.ignore();
+                getline(cin, strBuscar);
                 buscarDato(strBuscar, opcion, numNodo);
                 break;
             case 3:
                 cout << "\nIngresa el nombre a buscar: ";
-                cin >> strBuscar;
+                cin.ignore();
+                getline(cin, strBuscar);
                 buscarDato(strBuscar, opcion, numNodo);
                 break;
             case 4:
@@ -182,7 +206,22 @@ public:
                 {
                 //  El ID
                 case 1:
-                    cin >> strValor;
+                    // Validation made it
+                    cin.ignore();
+                    while (!validateID(input))
+                    {
+                        getline(cin, input);
+                        if (validateID(input))
+                        {
+                            strValor = input;
+                            break;
+                        }
+                        else
+                        {
+                            cout << "Ingresa un ID valido! \n";
+                            cout << "\nVuelve a intentarlo: ";
+                        }
+                    };
                     editarDato(strValor, editarValor, numNodo);
                     break;
 
@@ -467,6 +506,7 @@ public:
 
     ~Larticulo() // Destructor para liberar la memoria
     {
+
         nodoa *actual = this->cabeza;
         while (actual != NULL)
         {
@@ -474,6 +514,7 @@ public:
             actual = actual->prox;
             delete temp;
         }
+
         this->cabeza = NULL; // Establecer cabeza como NULL
     }
 };
@@ -719,6 +760,8 @@ int main(int argc, char const *argv[])
     int u;
     cin >> u;
 
+    cout << Productos;
+
     // datos
     int opcion = -1;
     int intMenu = -1;
@@ -907,5 +950,6 @@ int main(int argc, char const *argv[])
         }
     }
 
+    delete Productos;
     return 0;
 }
