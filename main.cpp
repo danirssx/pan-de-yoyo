@@ -434,26 +434,26 @@ public:
         };
     };
 
-    void refrescar()
-    { // actualiza toda la base de datos.txt(productos.txt)
-        nodoa *actual = this->cabeza;
-        fstream archivo;
-        archivo.open(direccion, std::ios::out | std::ios::trunc);
-        if (!archivo.is_open())
-            std::cout << "Error al abrir el archivo\n";
-        else
-        {
-            while (actual != NULL)
+    /*     void refrescar()
+        { // actualiza toda la base de datos.txt(productos.txt)
+            nodoa *actual = this->cabeza;
+            fstream archivo;
+            archivo.open(direccion, std::ios::out | std::ios::trunc);
+            if (!archivo.is_open())
+                std::cout << "Error al abrir el archivo\n";
+            else
             {
-                archivo << actual->articulo.id << "\n";
-                archivo << actual->articulo.nombre << "\n";
-                archivo << actual->articulo.precio << "\n";
-                archivo << actual->articulo.cantidad << "\n";
-                actual = actual->prox;
+                while (actual != NULL)
+                {
+                    archivo << actual->articulo.id << "\n";
+                    archivo << actual->articulo.nombre << "\n";
+                    archivo << actual->articulo.precio << "\n";
+                    archivo << actual->articulo.cantidad << "\n";
+                    actual = actual->prox;
+                }
+                archivo.close();
             }
-            archivo.close();
-        }
-    };
+        }; */
 
     void refrescar()
     { // actualiza toda la base de datos.txt(productos.txt)
