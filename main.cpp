@@ -168,17 +168,17 @@ public:
             case 3:
                 cout << "\nIngresa el nombre a buscar: ";
                 cin.ignore();
-                getline(cin, strBuscar);
+                validateStrInput(strBuscar);
                 buscarDato(strBuscar, opcion, numNodo);
                 break;
             case 4:
                 cout << "\nIngresa el precio a buscar: ";
-                cin >> floatBuscar;
+                funcFloat(floatBuscar);
                 buscarDato(floatBuscar, opcion, numNodo);
                 break;
             case 5:
                 cout << "\nIngresa la cantidad especifica a buscar: ";
-                cin >> intBuscar;
+                funcInt(intBuscar);
                 buscarDato(intBuscar, opcion, numNodo);
                 break;
 
@@ -207,38 +207,23 @@ public:
                 //  El ID
                 case 1:
                     // Validation made it
-                    cin.ignore();
-                    // while (!validateID(input))
-                    // {
-                    //     getline(cin, input);
-                    //     if (validateID(input))
-                    //     {
-                    //         strValor = input;
-                    //         break;
-                    //     }
-                    //     else
-                    //     {
-                    //         cout << "Ingresa un ID valido! \n";
-                    //         cout << "\nVuelve a intentarlo: ";
-                    //     }
-                    // };
                     validateStrInput(strValor, true);
                     editarDato(strValor, editarValor, numNodo);
                     break;
 
                 case 2:
-                    cin >> strValor;
+                    validateStrInput(strValor);
                     editarDato(strValor, editarValor, numNodo);
                     break;
 
                 case 3:
-                    cin >> floatValor;
+                    funcFloat(floatValor);
                     editarDato(floatValor, editarValor, numNodo);
 
                     break;
 
                 case 4:
-                    cin >> intValor;
+                    funcInt(intValor);
                     editarDato(intValor, editarValor, numNodo);
                     break;
 
@@ -248,7 +233,10 @@ public:
             }
             else
             {
-                cout << "\nNo se consiguio ningun producto con esas caracteristicas..." << endl;
+                cout << "\nNo se consiguio ningun producto con esas caracteristicas...\n\n"
+                     << endl;
+                // Seguir
+                cout << "Presiona cualquier tecla para continuar...";
                 _getch(); // Tiene que presionar una tecla para continuar
             }
         }
