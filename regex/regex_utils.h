@@ -14,6 +14,9 @@ bool validateInt(const std::string &input);
 bool validateFloat(const std::string &input);
 bool validateStr(const std::string &input);
 
+// Boolean functions
+bool boolStr(const std::string &input, bool id = false);
+
 // Functions
 std::string validateStrInput(std::string &strValor, bool id = false);
 int funcInt(int &intNum);
