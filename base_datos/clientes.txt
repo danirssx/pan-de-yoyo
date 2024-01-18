@@ -1,15 +1,50 @@
-Samuel
-Palacios
-29631417
-04241
-Sta Fe Sur
-Daniel
-Ross
-30142372
-04242185034
-Chacaito
-Santiago
-Andrade
-30123456
-04142921321
-Sta Rosa
+Juan
+García
+20876543
+04125678901
+Av. Principal
+Laura
+Martínez
+30543210
+04261234567
+Calle Bolívar
+Carlos
+Rodríguez
+19874532
+04121234567
+Urbanización Las Flores
+Ana
+Hernández
+27654321
+04261234589
+Carrera 5
+Pedro
+Sánchez
+30456789
+04121112233
+Callejón del Sol
+Isabel
+López
+21567890
+04261234568
+Avenida Libertador
+Miguel
+Pérez
+28765432
+04121113322
+Plaza Bolívar
+María
+Ramírez
+29345678
+04261234578
+Calle 8
+Luis
+Gómez
+26789012
+04121114444
+Residencias El Parque
+Gabriela
+Fernández
+27890123
+04261234577
+Alameda Central
