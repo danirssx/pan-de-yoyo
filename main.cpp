@@ -802,6 +802,47 @@ public:
         agregar(nombre, apellido, cedula, telefono, direccion);
     };
 
+    // Funcionalidades particulares       
+
+    // Modificar la función agregarCopia en la clase Lclientes
+    void agregarCopia(Cliente* nuevoCliente) {
+        // Crear un nuevo nodo con el cliente proporcionado
+        nodoc* nuevoNodo = new nodoc("", "", 0, 0, "");
+        nuevoNodo->cliente = *nuevoCliente;
+        nuevoNodo->prox = NULL;
+
+        // Agregar el nodo a la lista
+        if (cabeza == NULL) {
+            cabeza = nuevoNodo;
+        }
+        else {
+            nodoc* actual = cabeza;
+            while (actual->prox != NULL) {
+                actual = actual->prox;
+            }
+            actual->prox = nuevoNodo;
+        }
+    }
+
+
+    // Agrega esta función a la clase Lclientes
+    Cliente* findCliente(int indice) {
+        nodoc* actual = cabeza;
+        int iterador = 1;
+
+        while (actual != NULL) {
+            if (iterador == indice) {
+                // Devolver el puntero al cliente en el nodo actual
+                return &(actual->cliente);
+            }
+            actual = actual->prox;
+            iterador++;
+        }
+
+        // Si no se encuentra el índice, devolver nullptr
+        return nullptr;
+    }
+
     void agregar(string nombre, string apellido, long int cedula, long long telefono, string direccion)
     {
 
@@ -1098,27 +1139,79 @@ public:
         }
     }
 
-    void imprimir()
+    // void imprimir()
+    // {
+    //     system("cls");
+
+    //     nodoc* actual = this->cabeza;
+    //     cout << "\nClientes : " << endl;
+    //     cout << "\n";
+    //     int iterador = 1;
+
+    //     while (actual != NULL)
+    //     {
+    //         cout << "\t" << iterador;
+    //         cout << "Nombre: " << actual->cliente.nombre << " ";
+    //         cout << "Apellido: " << actual->cliente.apellido << " ";
+    //         cout << "Cedula: " << actual->cliente.cedula << " ";
+    //         cout << "Telefono: " << actual->cliente.telefono << " ";
+    //         cout << "Direccion: " << actual->cliente.direccion << endl;
+
+    //         cout << endl;
+
+    //         actual = actual->prox;
+
+    //         iterador++;
+    //     }
+    // }
+
+
+    void imprimir(int personalizado = 0)
     {
+        int iterador = 1;
+
         system("cls");
 
         nodoc* actual = this->cabeza;
-        cout << "\nClientes : " << endl;
+        cout << "\nClientes de la lista : " << endl;
         cout << "\n";
 
-        while (actual != NULL)
+        if (personalizado == 0)
         {
-            cout << "Nombre: " << actual->cliente.nombre << " ";
-            cout << "Apellido: " << actual->cliente.apellido << " ";
-            cout << "Cedula: " << actual->cliente.cedula << " ";
-            cout << "Telefono: " << actual->cliente.telefono << " ";
-            cout << "Direccion: " << actual->cliente.direccion << endl;
+            while (actual != NULL)
+            {
+                cout << iterador << " |- ";
 
-            cout << endl;
+                cout << "Nombre: " << actual->cliente.nombre;
+                cout << " | Apellido: " << actual->cliente.apellido;
+                cout << " | Cedula: " << actual->cliente.cedula;
+                cout << " | Telefono: " << actual->cliente.telefono;
+                cout << " | Direccion: " << actual->cliente.direccion << endl;
 
-            actual = actual->prox;
+                actual = actual->prox;
+                iterador++;
+            }
         }
-    }
+        else
+        {
+            while (actual != NULL)
+            {
+                if (personalizado == iterador)
+                {
+                    cout << iterador << " |- ";
+
+                    cout << "Nombre: " << actual->cliente.nombre;
+                    cout << " | Apellido: " << actual->cliente.apellido;
+                    cout << " | Cedula: " << actual->cliente.cedula;
+                    cout << " | Telefono: " << actual->cliente.telefono;
+                    cout << " | Direccion: " << actual->cliente.direccion << endl;
+                }
+                actual = actual->prox;
+                iterador++;
+            }
+        }
+    };
+
 
     // * CONSTRUCTOR (lee el .txt y llena la lista)
     Lclientes(string direccion)
@@ -1245,30 +1338,30 @@ int main(int argc, char const* argv[])
     cargar_direcciones("base_datos\\directorio.txt");
     // Declaracion
     Larticulo* Productos = new Larticulo(directorio["productos"]);
+
+    // Copias
+    Larticulo* Cprod = new Larticulo(directorio["recetas"]);
+    Articulo* artProducto;
+
+    // Vendedores
     Lvendedor* Vendedores = new Lvendedor(directorio["vendedores"]);
-    Lclientes* Clientes = new Lclientes(directorio["clientes"]);
-    Larticulo* Copia = new Larticulo(directorio["recetas"]);
 
-    Articulo* CProd = Productos->findArticulo(5);
+    // Clientes
+    Lclientes* Clientela = new Lclientes(directorio["clientes"]);
 
-    Copia->agregarCopia(CProd);
+    // Copias
+    Lclientes* Cclientela = new Lclientes(directorio["recetas"]);
+    Cliente* artCliente;
 
-    CProd = Productos->findArticulo(3);
-
-    Copia->agregarCopia(CProd);
-
-    CProd = Productos->findArticulo(1);
-
-    Copia->agregarCopia(CProd);
-
-    Copia->imprimir();
-
-    teclaAux = _getch(); // Tiene que presionar una tecla para continuar
-
-    // datos
+    // switches
     int opcion = -1;
     int intMenu = -1;
     int prinMenu = -1;
+
+    // New Options
+    int artOpciones = -1;
+    int select = -1;
+
     char tecla;
     while (prinMenu != 3)
     {
@@ -1279,11 +1372,102 @@ int main(int argc, char const* argv[])
 
 
         switch (prinMenu)
-        {
+        { // Construyendo factura
         case 1:
-            cout << "Holaaa";
 
-            tecla = _getch(); // Tiene que presionar una tecla para continuar
+            Clientela->imprimir();
+            cout << "\n";
+
+            cout << "El cliente esta registrado en la base de datos? " << endl;
+            cout << "\n";
+
+            cout << "\t1. Si " << endl;
+            cout << "\t2. No" << endl;
+            cout << "\n";
+
+            cout << "\t Presiona 0 para salir" << endl;
+
+
+            cin >> artOpciones;
+
+            if (artOpciones != 0) {
+                if (artOpciones == 1) {
+                    system("cls");
+
+
+                    Clientela->imprimir();
+                    cout << "\n";
+                    cout << "\t Presiona 0 para salir" << endl;
+                    cout << "\n";
+                    cout << "Selecciona el cliente: " << endl;
+                    cout << "\n";
+                    cin >> select;
+                    cout << "\n";
+
+                    artCliente = Clientela->findCliente(select);
+                    Cclientela->agregarCopia(artCliente);
+
+                    Cclientela->imprimir();
+                    cout << '\n';
+                    cout << "!!Este es el cliente seleccionado" << endl;
+                    cout << "Presiona ENTER para avanzar...";
+
+
+                    tecla = _getch(); // Tiene que presionar una tecla para continuar
+                };
+
+                if (artOpciones == 2) {
+                    system("cls");
+                    cout << "\t Presiona 0 para salir" << endl;
+                    Cclientela->pedirDatos();
+
+                    Cclientela->imprimir();
+                    cout << '\n';
+                    cout << "!!Este es el cliente seleccionado!!" << endl;
+                    cout << "Presiona ENTER para avanzar...";
+
+
+                    tecla = _getch(); // Tiene que presionar una tecla para continuar
+                }
+            }
+
+            // Logica de los productos
+            while (artOpciones != 0) {
+                Productos->imprimir();
+
+                cout << "Es hora de elegir los productos a seleccionar..." << endl;
+                cout << "\n";
+                cout << "Presiona el articulo: " << endl;
+                cin >> select;
+                cout << "\n";
+                cout << "Si deseas finalizar presiona: 0";
+
+                if (artOpciones != 0) {
+                    // Eliminar en los productos
+                    Productos->operacion(select, false);
+                    // Seleccionar el producto nuevo
+                    artProducto = Productos->findArticulo(select);
+                    Cprod->agregarCopia(artProducto);
+                };
+
+                system("cls");
+
+                Cprod->imprimir();
+                cout << "\n";
+                cout << "Productos seleccionados. " << endl;
+                cout << "\n";
+                cout << "\n";
+                cout << "\n";
+                cout << "Recuerda que para finalizar la compra debes presionar el 0...";
+
+                cout << "\n";
+                cout << "\n";
+                cout << "\n";
+                cout << "Presiona para avanzar";
+
+
+                tecla = _getch(); // Tiene que presionar una tecla para continuar
+            }
 
             break;
 
@@ -1434,27 +1618,6 @@ int main(int argc, char const* argv[])
                                 cout << "Lista de vendedores" << endl;
                                 Vendedores->imprimir();
 
-                                // int editarNodo, opcionOperacion;
-
-                                // cout << "\nCual Nodo deseas modificar: ";
-                                // cin >> editarNodo;
-
-                                // cout << "\nDeseas restar o sumar?";
-                                // cout << "\n1. |- Sumar";
-                                // cout << "\n2. |- Restar";
-
-                                // cout << "\nIngresa el valor: ";
-                                // cin >> opcionOperacion;
-
-                                // if (opcionOperacion == 1)
-                                // {
-                                //     Productos->operacion(editarNodo);
-                                // };
-
-                                // if (opcionOperacion == 2)
-                                // {
-                                //     Productos->operacion(editarNodo, false);
-                                // }
 
                                 // Opciones distintas
 
@@ -1482,9 +1645,9 @@ int main(int argc, char const* argv[])
 
                                 // Agregar un cliente
                                 cout << "Ingresa la data del cliente: " << endl;
-                                Clientes->pedirDatos();
+                                Clientela->pedirDatos();
 
-                                Clientes->imprimir();
+                                Clientela->imprimir();
 
                                 cout << "\nPresiona cualquier tecla para continuar...";
 
@@ -1494,7 +1657,7 @@ int main(int argc, char const* argv[])
                             case 2:
                                 // Lista
                                 cout << "Lista de clientes" << endl;
-                                Clientes->imprimir();
+                                Clientela->imprimir();
 
                                 cout << "\nPresiona cualquier tecla para continuar...";
 
@@ -1504,9 +1667,9 @@ int main(int argc, char const* argv[])
                             case 3:
                                 // Lista
                                 cout << "Editar cliente :)" << endl;
-                                Clientes->imprimir();
+                                Clientela->imprimir();
 
-                                Clientes->editarCliente();
+                                Clientela->editarCliente();
 
                                 // Opciones distintas
 
@@ -1517,7 +1680,7 @@ int main(int argc, char const* argv[])
 
                                 system("cls");
                                 // Lista
-                                Clientes->buscarClienteMenu();
+                                Clientela->buscarClienteMenu();
                                 // Opciones distintas
 
                                 tecla = _getch(); // Tiene que presionar una tecla para continuar
@@ -1526,7 +1689,7 @@ int main(int argc, char const* argv[])
 
                                 system("cls");
                                 // Lista
-                                Clientes->eliminar();
+                                Clientela->eliminar();
                                 // Opciones distintas
 
                                 tecla = _getch(); // Tiene que presionar una tecla para continuar
@@ -1550,10 +1713,10 @@ int main(int argc, char const* argv[])
         }
 
     }
-    delete CProd;
+    delete Cprod;
     delete Vendedores;
-    delete Copia;
+    delete artProducto;
     delete Productos;
-    delete Clientes;
+    delete Clientela;
     return 0;
 }

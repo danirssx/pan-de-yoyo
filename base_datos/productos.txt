@@ -31,7 +31,7 @@ Brownie de Chocolate
 4.8
 25
 A0009
-Tiramisú
+Tiramisu
 6.2
 18
 A0010
@@ -47,11 +47,11 @@ Cheesecake de Frambuesa
 8.2
 15
 A0013
-Buñuelos Rellenos de Crema
+Bunuelos Rellenos de Crema
 4.5
 28
 A0014
-Tarta de Limón
+Tarta de Limon
 6.8
 20
 A0015

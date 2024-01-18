@@ -1,50 +1,50 @@
 Juan
-García
+Garcia
 20876543
 04125678901
 Av. Principal
 Laura
-Martínez
+Martinez
 30543210
 04261234567
-Calle Bolívar
+Calle Bolivar
 Carlos
-Rodríguez
+Rodriguez
 19874532
 04121234567
-Urbanización Las Flores
+Urbanizacion Las Flores
 Ana
-Hernández
+Hernandez
 27654321
 04261234589
 Carrera 5
 Pedro
-Sánchez
+Sanchez
 30456789
 04121112233
-Callejón del Sol
+Callejon del Sol
 Isabel
-López
+Lopez
 21567890
 04261234568
 Avenida Libertador
 Miguel
-Pérez
+Perez
 28765432
 04121113322
-Plaza Bolívar
-María
-Ramírez
+Plaza Bolivar
+Maria
+Ramirez
 29345678
 04261234578
 Calle 8
 Luis
-Gómez
+Gomez
 26789012
 04121114444
 Residencias El Parque
 Gabriela
-Fernández
+Fernandez
 27890123
 04261234577
 Alameda Central
