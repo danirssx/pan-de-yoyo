@@ -22,3 +22,43 @@ A0006
 Galletas de Avena
 2
 124
+A0007
+Helado de Fresa
+7.5
+30
+A0008
+Brownie de Chocolate
+4.8
+25
+A0009
+Tiramisú
+6.2
+18
+A0010
+Palmeritas de Canela
+3.5
+40
+A0011
+Mousse de Vainilla
+5.1
+22
+A0012
+Cheesecake de Frambuesa
+8.2
+15
+A0013
+Buñuelos Rellenos de Crema
+4.5
+28
+A0014
+Tarta de Limón
+6.8
+20
+A0015
+Crepas de Nutella
+5.3
+35
+A0016
+Profiteroles de Dulce de Leche
+7.0
+25
