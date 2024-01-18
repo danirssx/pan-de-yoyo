@@ -9,8 +9,6 @@
 // Include other files
 #include "regex/regex_utils.h"
 
-// Include other files
-#include "regex/regex_utils.h"
 
 using namespace std;
 // MANEJO DE DIRECCIONES DE LA BASE DE DATOS
@@ -133,6 +131,47 @@ public:
         }
         this->refrescar();
     };
+
+    // Agregar esta función a la clase Larticulo
+    Articulo* findArticulo(int indice) {
+        nodoa* actual = cabeza;
+        int iterador = 1;
+
+        while (actual != NULL) {
+            if (iterador == indice) {
+                // Devolver el puntero al artículo en el nodo actual
+                return &(actual->articulo);
+            }
+            actual = actual->prox;
+            iterador++;
+        }
+
+        // Si no se encuentra el índice, devolver nullptr
+        return nullptr;
+    }
+
+    // Modificar la función agregarArticulo en la clase Larticulo
+    void agregarCopia(Articulo* nuevoArticulo) {
+        // Crear un nuevo nodo con el artículo proporcionado
+        nodoa* nuevoNodo = new nodoa("", "", 0.0f, 0);
+        nuevoNodo->articulo = *nuevoArticulo;
+        nuevoNodo->prox = NULL;
+
+        // Agregar el nodo a la lista
+        if (cabeza == NULL) {
+            cabeza = nuevoNodo;
+        }
+        else {
+            nodoa* actual = cabeza;
+            while (actual->prox != NULL) {
+                actual = actual->prox;
+            }
+            actual->prox = nuevoNodo;
+        }
+
+        // Refrescar la lista si es necesario
+        refrescar();
+    }
 
     // EDICION
     //
@@ -1197,12 +1236,34 @@ void imprimirMenu(int opcion = 0)
 // ///////////////////
 
 int main(int argc, char const* argv[])
+
 { // guarda las direcciones en diccionario
+
+    int base;
+    char teclaAux;
+
     cargar_direcciones("base_datos\\directorio.txt");
     // Declaracion
     Larticulo* Productos = new Larticulo(directorio["productos"]);
     Lvendedor* Vendedores = new Lvendedor(directorio["vendedores"]);
     Lclientes* Clientes = new Lclientes(directorio["clientes"]);
+    Larticulo* Copia = new Larticulo(directorio["recetas"]);
+
+    Articulo* CProd = Productos->findArticulo(5);
+
+    Copia->agregarCopia(CProd);
+
+    CProd = Productos->findArticulo(3);
+
+    Copia->agregarCopia(CProd);
+
+    CProd = Productos->findArticulo(1);
+
+    Copia->agregarCopia(CProd);
+
+    Copia->imprimir();
+
+    teclaAux = _getch(); // Tiene que presionar una tecla para continuar
 
     // datos
     int opcion = -1;
@@ -1221,6 +1282,9 @@ int main(int argc, char const* argv[])
         {
         case 1:
             cout << "Holaaa";
+
+            tecla = _getch(); // Tiene que presionar una tecla para continuar
+
             break;
 
         case 2:
@@ -1486,7 +1550,9 @@ int main(int argc, char const* argv[])
         }
 
     }
-
+    delete CProd;
+    delete Vendedores;
+    delete Copia;
     delete Productos;
     delete Clientes;
     return 0;
