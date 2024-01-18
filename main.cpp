@@ -3,6 +3,8 @@
 #include <string>
 #include <map>   //NUEVA LIBRERIA
 #include <regex> // Para validar
+#include <vector>
+#include <iomanip>
 // Para manejar el uso de los key arrows
 #include <conio.h>
 
@@ -397,6 +399,26 @@ public:
         }
     }
 
+    // Devolver precio
+    // 
+    // 
+    float obtenerPrecio(int idArticulo) {
+        nodoa* actual = cabeza;
+        int iterador = 1;
+
+        while (actual != NULL) {
+            if (iterador == idArticulo) {
+                return actual->articulo.precio;
+            }
+
+            actual = actual->prox;
+            iterador++;
+        }
+
+        // Devolver un valor especial (puedes cambiar esto según tus necesidades)
+        return -1.0f; // Valor negativo para indicar que no se encontró el artículo con el ID proporcionado
+    }
+
     // Sumar y Restar
     //
     //
@@ -421,11 +443,13 @@ public:
     //
     //
 
-    void imprimir(int personalizado = 0)
+    void imprimir(int personalizado = 0, int borrador = 0)
     {
         int iterador = 1;
 
-        system("cls");
+        if (borrador == 0) {
+            system("cls");
+        };
 
         nodoa* actual = this->cabeza;
         cout << "\nArticulos de la lista : " << endl;
@@ -1139,32 +1163,6 @@ public:
         }
     }
 
-    // void imprimir()
-    // {
-    //     system("cls");
-
-    //     nodoc* actual = this->cabeza;
-    //     cout << "\nClientes : " << endl;
-    //     cout << "\n";
-    //     int iterador = 1;
-
-    //     while (actual != NULL)
-    //     {
-    //         cout << "\t" << iterador;
-    //         cout << "Nombre: " << actual->cliente.nombre << " ";
-    //         cout << "Apellido: " << actual->cliente.apellido << " ";
-    //         cout << "Cedula: " << actual->cliente.cedula << " ";
-    //         cout << "Telefono: " << actual->cliente.telefono << " ";
-    //         cout << "Direccion: " << actual->cliente.direccion << endl;
-
-    //         cout << endl;
-
-    //         actual = actual->prox;
-
-    //         iterador++;
-    //     }
-    // }
-
 
     void imprimir(int personalizado = 0)
     {
@@ -1256,6 +1254,41 @@ public:
     }
 };
 
+//  FACTURA
+// 
+///////////////////
+
+// Clase Factura
+// Clase Factura
+class Factura {
+public:
+    Cliente* cliente;
+    Larticulo* listaArticulos;
+    float precioTotal;
+    int codigoFactura;
+
+    Factura(Cliente* cliente, Larticulo* listaArticulos, float precioTotal, int codigoFactura)
+        : cliente(cliente), listaArticulos(listaArticulos), precioTotal(precioTotal), codigoFactura(codigoFactura) {}
+
+    void imprimirFactura() const {
+        system("cls");
+        cout << "======================== FACTURA ========================" << endl;
+        cout << "Código de Factura: " << codigoFactura << endl;
+
+        cout << "\nCliente:" << endl;
+        cout << "Cédula: " << cliente->cedula << endl;
+        cout << "Nombre: " << cliente->nombre << endl;
+
+        cout << "\nLista de Artículos:" << endl;
+        listaArticulos->imprimir();
+
+        cout << "\nPrecio Total: $" << fixed << setprecision(2) << precioTotal << endl;
+
+        cout << "==========================================================" << endl;
+
+        char tecla = _getch(); // Tiene que presionar una tecla para continuar
+    }
+};
 // MENU
 //
 ////////////////
@@ -1353,6 +1386,7 @@ int main(int argc, char const* argv[])
     Lclientes* Cclientela = new Lclientes(directorio["recetas"]);
     Cliente* artCliente;
 
+
     // switches
     int opcion = -1;
     int intMenu = -1;
@@ -1362,7 +1396,13 @@ int main(int argc, char const* argv[])
     int artOpciones = -1;
     int select = -1;
 
+    // Importaciones
+    float precioTotal = 0;
+    int codigoBarra = 12838123;
+
+    // Factura
     char tecla;
+
     while (prinMenu != 3)
     {
         imprimirMenu(4);
@@ -1374,21 +1414,22 @@ int main(int argc, char const* argv[])
         switch (prinMenu)
         { // Construyendo factura
         case 1:
+            while (artOpciones != 1 && artOpciones != 2) {
+                Clientela->imprimir();
+                cout << "\n";
 
-            Clientela->imprimir();
-            cout << "\n";
+                cout << "El cliente esta registrado en la base de datos? " << endl;
+                cout << "\n";
 
-            cout << "El cliente esta registrado en la base de datos? " << endl;
-            cout << "\n";
+                cout << "\t1. Si " << endl;
+                cout << "\t2. No" << endl;
+                cout << "\n";
 
-            cout << "\t1. Si " << endl;
-            cout << "\t2. No" << endl;
-            cout << "\n";
-
-            cout << "\t Presiona 0 para salir" << endl;
+                cout << "\t Presiona 0 para salir" << endl;
 
 
-            cin >> artOpciones;
+                cin >> artOpciones;
+            }
 
             if (artOpciones != 0) {
                 if (artOpciones == 1) {
@@ -1432,7 +1473,7 @@ int main(int argc, char const* argv[])
             }
 
             // Logica de los productos
-            while (artOpciones != 0) {
+            while (select != 0) {
                 Productos->imprimir();
 
                 cout << "Es hora de elegir los productos a seleccionar..." << endl;
@@ -1442,12 +1483,15 @@ int main(int argc, char const* argv[])
                 cout << "\n";
                 cout << "Si deseas finalizar presiona: 0";
 
-                if (artOpciones != 0) {
+                if (select != 0) {
                     // Eliminar en los productos
                     Productos->operacion(select, false);
                     // Seleccionar el producto nuevo
                     artProducto = Productos->findArticulo(select);
                     Cprod->agregarCopia(artProducto);
+                    // Sumar precio
+                    precioTotal = precioTotal + Productos->obtenerPrecio(select);
+
                 };
 
                 system("cls");
@@ -1464,10 +1508,45 @@ int main(int argc, char const* argv[])
                 cout << "\n";
                 cout << "\n";
                 cout << "Presiona para avanzar";
+                cout << "\n";
 
+
+                cout << "precio total: " << precioTotal << endl;
+
+                if (select == 0) {
+                    // FASE TOTAL
+            // 
+            // 
+                    codigoBarra = codigoBarra + precioTotal * 3;
+
+                    cout << "precio total: " << precioTotal << endl;
+                    cout << "Codigo de Barra: " << codigoBarra << endl;
+                }
 
                 tecla = _getch(); // Tiene que presionar una tecla para continuar
             }
+
+            // FASE TOTAL
+            // 
+            // 
+            system("cls");
+            std::cout << "======================== FACTURA ========================" << std::endl;
+
+            std::cout << "\n                        Cliente       " << std::endl;
+            cout << "\n";
+            std::cout << "Cedula: " << artCliente->cedula << std::endl;
+            std::cout << "Nombre: " << artCliente->nombre << std::endl;
+            std::cout << "Apellido: " << artCliente->apellido << std::endl;
+
+            Cprod->imprimir(0, 1);
+
+            std::cout << "\nPrecio Total: $" << std::fixed << std::setprecision(2) << precioTotal << std::endl;
+
+            std::cout << "==========================================================" << std::endl;
+
+
+            tecla = _getch(); // Tiene que presionar una tecla para continuar
+
 
             break;
 
